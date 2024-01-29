@@ -15,7 +15,9 @@ OR
 	> $ mariadb -h YOUR_HOST_NAME -u username -ppassword database_name
 
 Where to connect locally you simply put localhost and the Credentials you'll setup eventually with the command below.
+<br>
 If you want to connect to a remote DB, you'll have to enter the IP address of the remote db.
+<br>
 database_name is optional.
 
 Setup User (While inside MariaDB):
