@@ -111,6 +111,6 @@ Connect to Remote MariaDB Server:
 	> $ sudo apt install libmariadb3 libmariadb-dev
 	> $ pip install mariadb
 
-[Docker Docs](https://docs.docker.com/)
 [MariaDB Docs](https://mariadb.com/kb/en/documentation/)
 [MariaDB Knowledge Base](https://mariadb.com/kb/en/)
+[MariaDB Python Connector](https://mariadb.com/resources/blog/how-to-connect-python-programs-to-mariadb/)
