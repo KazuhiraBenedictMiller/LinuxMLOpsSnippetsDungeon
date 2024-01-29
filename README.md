@@ -1,2 +1,19 @@
-# LinuxMLOpsSnippetsDungeon
-Some ReUsable Snippets for Linux (Debian and Debian-Based Distros Preferabbly), and commands for all things installing and managing Containers, Databases, Frameworks and More!!
+# ⚠️ Best Suited for Debian-based Distros 🐧
+
+<img src="/pics/Dungeon.png">
+
+# Welcome to the Dungeon bro.
+
+Ever had that brain freeze moment in the Linux terminal, searching for that one command you've used a thousand times for your MLOps/DataOps infrastructure? 
+Fear not, here you have a wealth of curated commands and code snippets!
+
+### How Does it Work?
+
+Every folder contains a treasure trove of reusable snippets curated for Debian and Debian-based distros. 
+Simply copy-paste the snippets and commands for effortlessly installing and managing containers, databases, frameworks, and more!!
+
+Every Folder also contains a Super Dummy Code Example (Mostly in Python - sorry not sorry) that explains the basic functionalities for that given tool and that can be used as boilerplate.
+
+Have fun!
+
+#### Built with ❤️ on [StackEdit.io](https://stackedit.io) 
