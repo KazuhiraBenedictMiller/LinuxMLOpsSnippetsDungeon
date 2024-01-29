@@ -17,8 +17,8 @@ Have fun!
 
 # ⚠️ Best Suited for Debian-based Distros 🐧
 
-#### Built with ❤️ on [StackEdit.io](https://stackedit.io) 
-
 <div align="left">
     <b>Let's connect  on <a href="https://www.linkedin.com/in/andrea-amedeo.serravalle/">LinkedIn</a> 🤗</b>
 </div>
+
+#### Built with ❤️ on [StackEdit.io](https://stackedit.io) 
