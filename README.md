@@ -11,7 +11,7 @@ Fear not, here you have a wealth of curated commands and code snippets!
 Every folder contains a treasure trove of reusable snippets curated for Debian and Debian-based distros. 
 Simply copy-paste the snippets and commands for effortlessly installing and managing containers, databases, frameworks, and more!!
 
-Every folder also contains a Super-Dummy code example (mostly in Python - sorry, not sorry) that explains the basic functionalities for that given tool and that can be used as boilerplate.
+Most of the folders also contain a Super-Dummy code example (mostly in Python - sorry, not sorry) that explains the basic functionalities for that given tool and that can be used as boilerplate.
 
 Have fun!
 
