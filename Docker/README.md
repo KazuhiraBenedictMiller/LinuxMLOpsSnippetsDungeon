@@ -1,4 +1,4 @@
-<img src="pics/Docker.png">
+<img src="/pics/Docker.png">
 
 ## ▪️ Docker 🐋 
 
