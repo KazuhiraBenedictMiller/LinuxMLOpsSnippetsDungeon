@@ -1,5 +1,10 @@
 <img src="/pics/Dungeon.png">
 
+
+<div align="center">
+    <b>Let's connect  on <a href="https://www.linkedin.com/in/andrea-amedeo.serravalle/">LinkedIn</a> 🤗</b>
+</div>
+
 # Welcome to the Dungeon bro.
 
 Ever had that brain freeze moment in the Linux terminal, searching for that one command you've used a thousand times for your MLOps/DataOps infrastructure? 
@@ -16,9 +21,5 @@ Most of the folders also contain a Super-Dummy code example (mostly in Python - 
 Have fun!
 
 # ⚠️ Best Suited for Debian-based Distros 🐧
-
-<div align="left">
-    <b>Let's connect  on <a href="https://www.linkedin.com/in/andrea-amedeo.serravalle/">LinkedIn</a> 🤗</b>
-</div>
 
 #### Built with ❤️ on [StackEdit.io](https://stackedit.io) 
