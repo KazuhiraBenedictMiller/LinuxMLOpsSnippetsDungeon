@@ -20,5 +20,5 @@ Have fun!
 #### Built with ❤️ on [StackEdit.io](https://stackedit.io) 
 
 <div align="left">
-    Let's connect  on <a href="https://www.linkedin.com/in/andrea-amedeo.serravalle/">LinkedIn</a> 🤗
+    **Let's connect  on <a href="https://www.linkedin.com/in/andrea-amedeo.serravalle/">LinkedIn</a> 🤗**
 </div>
