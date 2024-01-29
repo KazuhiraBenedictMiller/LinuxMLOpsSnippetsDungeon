@@ -14,7 +14,7 @@ OR
 
 	> $ mariadb -h YOUR_HOST_NAME -u username -ppassword database_name
 
-Where to connect locally you simply put localhost and the Credentials you'll setup eventually with the command below.
+Where to connect locally you simply put localhost and the credentials you'll setup eventually with the command below.
 <br>
 If you want to connect to a remote DB, you'll have to enter the IP address of the remote db.
 <br>
@@ -37,7 +37,7 @@ Get into MariaDB CLI (and into the Container running it):
 
 	> $ sudo docker exec -i -t mdb mariadb --user root -pPassword123!
 
-To Connect to a Local Docker Image running MariaDB from Outside the Container but on the same Machine:
+To Connect to a Local Docker Image running MariaDB from outside the Container but on the same Machine:
 
 Get the Docker image IP Address :
 
@@ -55,7 +55,7 @@ Locate the 50-server.cnf file, usually located in
 	
 	/etc/mysql/mariadb.conf.d 
 
-Then cd in the Folder.
+Then cd into the golder.
 
 Edit the File with a Text Editor (Nano will do fine):
 
@@ -63,11 +63,11 @@ Edit the File with a Text Editor (Nano will do fine):
 	> $ apt install nano
 	> $ nano 50-server.cnf
 
-Comment the Following Lines (with #):
+Comment the following lines (with #):
 
 	#bind-address 		= 127.0.0.1 
 
-Then Restart the DB with:
+Then restart the DB with:
 
 	> $ sudo systemctl restart mariadb
 
@@ -93,7 +93,7 @@ Apply Changes:
 	
 **Check that everything was successful**
 
-run an Ubuntu empty container with:
+Run an Ubuntu empty container with:
 
 	> $ docker run -i -t ubuntu bash
 	
