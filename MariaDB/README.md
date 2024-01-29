@@ -95,7 +95,7 @@ Apply Changes:
 
 Run an Ubuntu empty container with:
 
-	> $ docker run -i -t ubuntu bash
+	> $ sudo docker run -i -t ubuntu bash
 	
 Then:
 
