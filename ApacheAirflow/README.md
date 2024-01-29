@@ -6,7 +6,6 @@
 	
 Create and Activate your Virtual Env (venv), then:
 
-
 ⚠️  **NOTE:** For Airflow venv installations all airflow commands must be typed in terminals after activating your venv.
 
 	> $ pip install "apache-airflow[celery]==2.8.1" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.8.1/constraints-3.8.txt"
@@ -32,7 +31,7 @@ Create Admin User:
 	    --role Admin \  
 	    --email admin@example.com
 
-Start the Airflow web server and scheduler components in separate terminals:
+Start the Airflow webserver and scheduler components in separate terminals:
 
 	> $ airflow webserver --port 8080  
 	> $ airflow scheduler
@@ -93,7 +92,7 @@ Also, you can enter some airflow-cli commands from the webserver container id, o
 	> $ sudo docker exec -i-t AIRFLOW_WEBSERVER_CONTAINER_ID sh
 	> $ sudo docker compose exec -i -t AIRFLOW_WEBSERVER_CONTAINER_ID airflow dags unpause DAG_ID
 
-To stop and delete containers, delete volumes with database data and download images, run:
+To stop and delete containers, delete volumes with database data and downloaded images, run:
 
 	> $ sudo docker compose down --volumes --remove-orphans --rmi  all
 	> $ sudo docker compose down --volumes --remove-orphans
