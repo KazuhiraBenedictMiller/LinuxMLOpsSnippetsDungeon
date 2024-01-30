@@ -27,6 +27,7 @@ Setup User and Grant Privileges (While inside MariaDB):
 
  
 **⚠️  NOTE:** When granting privileges the current configuration 'user'@'localhost' means that you are giving privileges for user on connections from the current host.
+<br>
 	      If you would like to actually connect from another IP with user, you'd need to change 'localhost' with 'ip_address' where ip_address is the address where you would like to connect remotely from.
        	      Also, you can simply put the wildcard '%' like 'user'@'%' to grant privileges on user connecting from any ip_address.
 
