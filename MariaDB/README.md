@@ -20,9 +20,15 @@ If you want to connect to a remote DB, you'll have to enter the IP address of th
 <br>
 database_name is optional.
 
-Setup User (While inside MariaDB):
+Setup User and Grant Privileges (While inside MariaDB):
 
-	> GRANT ALL ON *.* TO 'user'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;
+	> CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+	> GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTIONS;
+
+ 
+**⚠️  NOTE:** When granting privileges the current configuration 'user'@'localhost' means that you are giving privileges for user on connections from the current host.
+	      If you would like to actually connect from another IP with user, you'd need to change 'localhost' with 'ip_address' where ip_address is the address where you would like to connect remotely from.
+       	      Also, you can simply put the wildcard '%' like 'user'@'%' to grant privileges on user connecting from any ip_address.
 
 [More on Users](https://mariadb.com/kb/en/create-user/)
 [More on Privileges](https://mariadb.com/kb/en/grant/)
