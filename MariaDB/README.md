@@ -43,7 +43,7 @@ Create Container:
 
 Get into MariaDB CLI (and into the Container running it):
 
-	> $ sudo docker exec -i -t mdb mariadb --user root -ppassword
+	> $ sudo docker exec -i -t mdb mariadb -u root -ppassword
 
 To Connect to a Local Docker Image running MariaDB from outside the Container but on the same Machine:
 
