@@ -24,7 +24,7 @@ Setup User and Grant Privileges (While inside MariaDB):
 
 	> CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 	> GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTIONS;
-
+	> FLUSH PRIVILEGES;
  
 **⚠️  NOTE:** When granting privileges the current configuration 'user'@'localhost' means that you are giving privileges for user on connections from the current host.
 <br>
@@ -39,31 +39,31 @@ Also, you can simply put the wildcard '%' like 'user'@'%' to grant privileges on
 
 Create Container:
 
-	> $ sudo docker run -p 127.0.0.1:3306:3306  --name mdb -e MARIADB_ROOT_PASSWORD=Password123! -d mariadb:latest
+	> $ sudo docker run -p 3306:3306  --name mdb -e MARIADB_ROOT_PASSWORD=password -d mariadb:latest
 
 Get into MariaDB CLI (and into the Container running it):
 
-	> $ sudo docker exec -i -t mdb mariadb --user root -pPassword123!
+	> $ sudo docker exec -i -t mdb mariadb --user root -ppassword
 
 To Connect to a Local Docker Image running MariaDB from outside the Container but on the same Machine:
 
 Get the Docker image IP Address :
 
-	 > $ sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' MARIA_DB_CUSTOM_CONTAINER_NAME
+	 > $ sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' MARIA_DB_CUSTOM_CONTAINER_ID_OR_NAME
 
-Where the CUSTOM_CONTAINER_NAME is the one you've assigned with --name flag in docker run
+Where the CUSTOM_CONTAINER_ID_OR_NAME is the one you've assigned with --name flag in docker run
 
 Connect then to MariaDB from outside the container locally:
 
 	> $ sudo mariadb -h DOCKER_IP_ADDRESS -u MARIADB_USER -pMARIADB_PASSWORD
 
-**Accept External Connections - BOTH Local and Docker:**
+**Accept External Connections from different IP/Machines - BOTH Local and Docker:**
 
 Locate the 50-server.cnf file, usually located in 
 	
 	/etc/mysql/mariadb.conf.d 
 
-Then cd into the golder.
+Then cd into the folder.
 
 Edit the File with a Text Editor (Nano will do fine):
 
@@ -71,13 +71,17 @@ Edit the File with a Text Editor (Nano will do fine):
 	> $ apt install nano
 	> $ nano 50-server.cnf
 
-Comment the following lines (with #):
+Comment the following lines (with #) and set the bind-address to 0.0.0.0:
 
 	#bind-address 		= 127.0.0.1 
+ 	bind-address = 0.0.0.0
 
-Then restart the DB with:
+Then restart the local DB with:
 
 	> $ sudo systemctl restart mariadb
+
+OR, restart the Container:
+	> $ sudo docker restart MARIA_DB_CUSTOM_CONTAINER_ID_OR_NAME
 
 Locate your IP Address with:
 
@@ -85,11 +89,11 @@ Locate your IP Address with:
 
 Connect to MariaDB and Create a new User:
 
-	> CREATE USER 'your_username'@'host_ip_addr' IDENTIFIED BY 'your_password';
+	> CREATE USER 'your_username'@'localhost' IDENTIFIED BY 'your_password';
 
 Grant necessary privileges to User:
 
-	> GRANT ALL PRIVILEGES ON *.* TO 'your_username'@'%';
+	> GRANT ALL PRIVILEGES ON *.* TO 'your_username'@'%' IDENTIFIED BY 'your_password' WITH GRANT OPTIONS;
 
 Where * . * stands for ALL_DATABASES, You can also use db_name*.* to only let the user use the database db_name.
 
