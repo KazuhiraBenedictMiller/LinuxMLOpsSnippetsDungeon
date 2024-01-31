@@ -108,7 +108,7 @@ Apply Changes:
 
 **⚠️  NOTE:** On Docker the line bind-address in 50-server.cnf is usually already commented out.
 
-**⚠️  NOTE:** In some cases, for connecting from an external machine, you might also have to configure the Firewall to accept external connection from a list of trusted dirrent IP Adresses and open the Port (in this case 3306) to listen for incoming connections.
+**⚠️  NOTE:** In some cases, for connecting from an external machine, you might also have to configure the Firewall to accept external connection from a list of trusted different IP Addresses and open the Port (in this case 3306) to listen for incoming connections.
  
 **Check that everything was successful**
 
