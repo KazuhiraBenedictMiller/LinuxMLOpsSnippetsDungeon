@@ -121,6 +121,10 @@ OR (unsafe):
 Then:
 
 	> $ sudo ufw reload
+
+If you're handling sensitive data, make sure you know exctly what you're doing.
+<br>
+Eventualy, enroll in som courses regarding Networking and Security.
  
 **Check that everything was successful**
 
