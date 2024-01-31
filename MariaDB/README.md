@@ -37,6 +37,15 @@ Also, you can simply put the wildcard '%' like 'user'@'%' to grant privileges on
 
 **Docker:**
 
+First, mkdir for a MariaDB dir and cd into it:
+
+	> $ mkdir MariaDocker
+	> $ cd MariaDocker
+
+Pull the MariaDB Docker Image:
+
+	> $ sudo docker pull mariadb
+
 Create Container:
 
 	> $ sudo docker run -p 3306:3306 --name mdb -e MARIADB_ROOT_PASSWORD=password -d mariadb:latest
