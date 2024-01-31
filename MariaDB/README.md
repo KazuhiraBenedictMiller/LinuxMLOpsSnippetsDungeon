@@ -109,6 +109,18 @@ Apply Changes:
 **⚠️  NOTE:** On Docker the line bind-address in 50-server.cnf is usually already commented out.
 
 **⚠️  NOTE:** In some cases, for connecting from an external machine, you might also have to configure the Firewall to accept external connection from a list of trusted different IP Addresses and open the Port (in this case 3306) to listen for incoming connections.
+
+In those cases:
+
+	> $ sudo ufw allow from remote_IP_address to any port 3306
+
+OR (unsafe):
+
+	> $ sudo ufw allow 3306
+
+Then:
+
+	> $ sudo ufw reload
  
 **Check that everything was successful**
 
