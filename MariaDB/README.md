@@ -71,7 +71,7 @@ Edit the File with a Text Editor (Nano will do fine):
 	> $ apt install nano
 	> $ nano 50-server.cnf
 
-Find and set the bind-address to 0.0.0.0:
+Find and set the bind-address to 0.0.0.0 and comment out (with #) the line skip-networking (if in the file):
 
 	Replace: #bind-address 		= 127.0.0.1 
  	With: bind-address = 0.0.0.0
@@ -107,7 +107,9 @@ Apply Changes:
 	> FLUSH PRIVILEGES;
 
 **⚠️  NOTE:** On Docker the line bind-address in 50-server.cnf is usually already commented out.
-	
+
+**⚠️  NOTE:** In some cases, for connecting from an external machine, you might also have to configure the Firewall to accept external connection from a list of trusted dirrent IP Adresses and open the Port (in this case 3306) to listen for incoming connections.
+ 
 **Check that everything was successful**
 
 Run an Ubuntu empty container with:
