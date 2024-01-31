@@ -126,5 +126,9 @@ Then:
 
 	> $ sudo ufw reload
 
+If you're handling sensitive data, make sure you know exctly what you're doing.
+<br>
+Eventualy, enroll in som courses regarding Networking and Security.
+
 [MySQL Docker](https://dev.mysql.com/doc/mysql-installation-excerpt/8.3/en/docker-mysql-getting-started.html)
 [MySQL Docs](https://dev.mysql.com/doc/)
