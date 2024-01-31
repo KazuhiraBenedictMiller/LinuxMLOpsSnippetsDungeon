@@ -47,7 +47,7 @@ Get into MariaDB CLI (and into the Container running it):
 
 To Connect to a Local Docker Image running MariaDB from outside the Container but on the same Machine:
 
-Get the Docker image IP Address :
+Get the Docker Container IP Address :
 
 	 > $ sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' MARIA_DB_CUSTOM_CONTAINER_ID_OR_NAME
 
