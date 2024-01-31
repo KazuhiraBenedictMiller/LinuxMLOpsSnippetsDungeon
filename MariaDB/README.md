@@ -23,7 +23,7 @@ database_name is optional.
 Setup User and Grant Privileges (While inside MariaDB):
 
 	> CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
-	> GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTIONS;
+	> GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;
 	> FLUSH PRIVILEGES;
  
 **⚠️  NOTE:** When granting privileges the current configuration 'user'@'localhost' means that you are giving privileges for user on connections from the current host.
@@ -39,7 +39,7 @@ Also, you can simply put the wildcard '%' like 'user'@'%' to grant privileges on
 
 Create Container:
 
-	> $ sudo docker run -p 3306:3306  --name mdb -e MARIADB_ROOT_PASSWORD=password -d mariadb:latest
+	> $ sudo docker run -p 3306:3306 --name mdb -e MARIADB_ROOT_PASSWORD=password -d mariadb:latest
 
 Get into MariaDB CLI (and into the Container running it):
 
@@ -53,7 +53,7 @@ Get the Docker image IP Address :
 
 Where the CUSTOM_CONTAINER_ID_OR_NAME is the one you've assigned with --name flag in docker run
 
-Connect then to MariaDB from outside the container locally:
+Connect then to MariaDB from outside the container, but locally (Outside the Container, but same machine from MariaDB-Client):
 
 	> $ sudo mariadb -h DOCKER_IP_ADDRESS -u MARIADB_USER -pMARIADB_PASSWORD
 
@@ -71,29 +71,34 @@ Edit the File with a Text Editor (Nano will do fine):
 	> $ apt install nano
 	> $ nano 50-server.cnf
 
-Comment the following lines (with #) and set the bind-address to 0.0.0.0:
+Find and set the bind-address to 0.0.0.0:
 
-	#bind-address 		= 127.0.0.1 
- 	bind-address = 0.0.0.0
+	Replace: #bind-address 		= 127.0.0.1 
+ 	With: bind-address = 0.0.0.0
 
 Then restart the local DB with:
 
 	> $ sudo systemctl restart mariadb
 
+OR with (can also be used inside MariaDB Container /bin/bash Shell):
+
+	> $ sudo service mariadb restart
+
 OR, restart the Container:
-	> $ sudo docker restart MARIA_DB_CUSTOM_CONTAINER_ID_OR_NAME
+
+ 	> $ sudo docker restart MARIA_DB_CUSTOM_CONTAINER_ID_OR_NAME
 
 Locate your IP Address with:
 
 	> $ ip a
 
-Connect to MariaDB and Create a new User:
+Connect to MariaDB and Create a new that can connect from anywhere with all permissions when connecting from anywhere:
 
-	> CREATE USER 'your_username'@'localhost' IDENTIFIED BY 'your_password';
+	> CREATE USER 'user'@'%' IDENTIFIED BY 'password';
 
 Grant necessary privileges to User:
 
-	> GRANT ALL PRIVILEGES ON *.* TO 'your_username'@'%' IDENTIFIED BY 'your_password' WITH GRANT OPTIONS;
+	> GRANT ALL PRIVILEGES ON *.* TO 'user'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION;
 
 Where * . * stands for ALL_DATABASES, You can also use db_name*.* to only let the user use the database db_name.
 
