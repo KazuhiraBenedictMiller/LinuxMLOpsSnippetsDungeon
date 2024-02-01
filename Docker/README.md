@@ -51,6 +51,20 @@ Run a Docker Image:
 
 Where -i stands for interactive and -t stands for terminal, this way you'll see the terminal outputs and can interact with it.
 
+Build a Docker Volume to Share Data Local-Container Consistently:
+
+	> $ sudo docker volume create DOCKER_VOLUME_NAME
+
+Then, to mount that volume:
+
+ 	> $ sudo docker run --name CONTAINER_NAME -d -i -t -v DOCKER_VOLUME_NAME:/container/folder/path DOCKER_IMAGE_NAME
+
+ In case you would like to have a local folder synched with a folder inside the container, to consistently share every change happens in either the Container or Locally in that folder:
+ 
+ 	> $ sudo docker run --name CONTAINER_NAME -d -i -t -v /host/folder/path:/container/folder/path DOCKER_IMAGE_NAME
+
+With the above command any changes made to files within the local folder will be reflected to the container folder and vice-versa.
+
 Start a Stopped Docker Container:
 
 	> $ sudo docker start STOPPED_DOCKER_CONTAINER_ID
