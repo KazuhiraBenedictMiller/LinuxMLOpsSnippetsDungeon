@@ -62,7 +62,7 @@ Then, simply run:
 
 	> $ mysql -h MYSQL_CONTAINER_IP_ADDRESS -u username -ppassword
 
-**Accept External Connections:**
+**Accept External Connections from different IP/Machines - BOTH Local and Docker:**
 
 First of all, the easiest way to allow external connections to your Docker based MySQL is to pass an Env variable as follows:
 
