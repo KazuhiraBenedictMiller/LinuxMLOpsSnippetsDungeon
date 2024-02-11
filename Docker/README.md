@@ -65,6 +65,10 @@ Then, to mount that volume:
 
 With the above command any changes made to files within the local folder will be reflected to the container folder and vice-versa.
 
+Get the Logs for a given Container:
+
+	> $ sudo docker logs RUNNING_DOCKER_CONTAINER_ID
+
 Start a Stopped Docker Container:
 
 	> $ sudo docker start STOPPED_DOCKER_CONTAINER_ID
