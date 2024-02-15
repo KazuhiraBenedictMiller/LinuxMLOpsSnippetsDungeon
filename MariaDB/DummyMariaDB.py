@@ -44,3 +44,6 @@ if __name__ == "__main__":
     checkdf = pd.DataFrame(data = [x for x in cur], columns = ["Date", "Close"])
     print(checkdf)
 
+    cur.close()
+    conn.close()
+
