@@ -34,7 +34,7 @@ FROM ubuntu:latest
 EXPOSE 8888
 
 # Update package repositories and install necessary packages
-RUN apt update && \
+RUN apt-get update -y && \
     apt-get install -y nano python3 python3-pip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
