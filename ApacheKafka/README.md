@@ -231,8 +231,8 @@ services:
         timeout: 5s
 
   kafka-processor-1:
-	  container_name: processor1
-	  restart: always
+    container_name: processor1
+    restart: always
     build: ./processor1
     depends_on:
       - zookeeper
@@ -245,8 +245,8 @@ services:
     command: python3 kafka_script.py
 
   kafka-processor-2:
-	  container_name: processor2
-	  restart: always
+    container_name: processor2
+    restart: always
     build: ./processor2
     depends_on:
       - zookeeper
@@ -260,8 +260,8 @@ services:
     command: python3 kafka_script.py
     
   kafka-processor-3:
-	  container_name: processor3
-	  restart: always
+    container_name: processor3
+    restart: always
     build: ./processor3
     depends_on:
       - zookeeper
