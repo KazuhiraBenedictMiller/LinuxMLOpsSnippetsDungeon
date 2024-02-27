@@ -198,10 +198,15 @@ services:
 ```
 
 This one above is a super simple Containerization for a multi container application that also uses Apache Airflow.
+<br>
 However, we can actually tweak the docker compose by taking inspiration from the official one to make it more suitable for production purposes.
 
 After Launching the docker compose simply copy your dags in the dags folder and open the web UI at localhost:8080.
+<br>
 To unpause and use the airflow cli, enter into the webserver container terminal to launch your commands:
+
+ 	> $ sudo docker exec -i -t -u root AIRFLOW_WEBSERVER_CONTAINER_ID_OR_NAME airflow dags unpause DAG_ID
+ 
 To install requirements for your dags, you'll need to extend the docker compose, that's why we needed a docker file that does nothing but installing the requirements.
 
 Here's how the Dockerfile.airflow will look like:
@@ -233,7 +238,7 @@ However, depending on your specific use case and architecture, you might want to
 
 2.  **Triggerer:** If you're using the Triggerer component, which allows external systems to trigger DAG runs, you may need to add a separate service for it.
 
-3.  **Database:** Although you already have a PostgreSQL service in your `docker-compose.yml`, it's worth noting that Airflow requires a database backend to store metadata about the workflows and their state. Which is correctly included this in this setup.
+3.  **Database:** Although you already have a PostgreSQL service in your `docker-compose.yml`, it's worth noting that Airflow requires a database backend to store metadata about the workflows and their state. Which is correctly included in this setup, sometimes for production environment, it's better to use 2 separate database services for airflow metadata and actual data.
 
 4.  **Redis:** If you're using the LocalExecutor, Redis is used as a message broker for task queuing. You don't need a separate Redis service if you're using the LocalExecutor, as it's included in the Airflow image. However, if you switch to the CeleryExecutor, you'll need to add a Redis service.
 
