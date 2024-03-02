@@ -39,8 +39,8 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Remove Externally Managed to install packages directly with pip
-RUN  rm /usr/lib/python3.*/EXTERNALLY-MANAGED
+# OPTIONAL - Remove Externally Managed to install packages directly with pip if you're not going to run the Container Shell as root user - Uncomment if Necessary.
+# RUN  rm /usr/lib/python3.*/EXTERNALLY-MANAGED
 
 # Install IPython and create a kernel
 RUN pip3 install ipython ipykernel jupyter elyra-python-editor-extension
