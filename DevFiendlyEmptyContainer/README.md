@@ -61,6 +61,10 @@ Then, Create the Dockerfile and copy paste the above code into it, then build th
 
 	> $ sudo docker build -t ubuntudockerdev .
 
+You can use the -f flag to specify where the Image actually is if it's in a sub folder, for example:
+
+	> $ sudo docker build -t ubuntudockerdev . -f Dockerfiles/Dockerfile.ubuntudockerdev
+
 Run the Image and spin up a Container:
 
 	> $ sudo docker run --name ubuntudev -p 8888:8888 -i -t -d -v ./:/localsynch ubuntudockerdev
