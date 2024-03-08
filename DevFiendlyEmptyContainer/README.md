@@ -1,6 +1,6 @@
 ## ▪️ Debian Empty Container for Isolated Development 🐧
 
-Tired of all those Package Management Tools?
+Tired of all those Package Management Tools or just want to make local development a breeze?
 <br>
 I got ur back!  
 
@@ -63,7 +63,7 @@ Then, Create the Dockerfile and copy paste the above code into it, then build th
 
 You can use the -f flag to specify where the Image actually is if it's in a sub folder, for example:
 
-	> $ sudo docker build -t ubuntudockerdev . -f Dockerfiles/Dockerfile.ubuntudockerdev
+	> $ sudo docker build -t ubuntudockerdev . -f /Path/To/Dockerfile.ubuntudockerdev
 
 Run the Image and spin up a Container:
 
@@ -81,7 +81,17 @@ Need to install more packages or access the Ubuntu Container's terminal? No Prob
 Would you also like to publish to github all the content of the mounted volume on the folder?
 <br>
 Best way to do so it to simply git init on the folder, on localhost, but can also be done from within the Container, as long as you install git into it.
+<br>
+In case you need to stop the container, but get back on your jupyter lab later on running on the container, simply stop the container, turn off and on the pc later on, start the container again and exec the jupyter lab command:
 
+	> $ sudo docker stop ubuntudev
+	> $ sudo docker start ubuntudev
+	> $ sudo docker exec -i -u root ubuntudev jupyter lab
+
+	OR
+
+	> $ sudo docker exec -i -t -u root ubuntudev /bin/bash
+	> $ jupyter lab (inside the container's terminal)
 
 
 
