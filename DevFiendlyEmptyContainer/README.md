@@ -42,6 +42,9 @@ RUN apt-get update -y && \
 # OPTIONAL - Remove Externally Managed to install packages directly with pip if you're not going to run the Container Shell as root user - Uncomment if Necessary.
 # RUN  rm /usr/lib/python3.*/EXTERNALLY-MANAGED
 
+#Update and Upgrade Package Repositories (Sometimes you'd need to do it later when the Container is Running)
+RUN apt update && apt upgrade -y
+
 # Install IPython and create a kernel
 RUN pip3 install ipython ipykernel jupyter elyra-python-editor-extension
 
