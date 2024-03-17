@@ -65,6 +65,10 @@ Then, to mount that volume:
 
 With the above command any changes made to files within the local folder will be reflected to the container folder and vice-versa.
 
+Get the IP Address of a Container: 
+
+	> $ sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' CONTAINER_ID_OR_NAME
+
 Get the Logs for a given Container:
 
 	> $ sudo docker logs RUNNING_DOCKER_CONTAINER_ID
