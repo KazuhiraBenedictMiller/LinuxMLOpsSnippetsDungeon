@@ -49,7 +49,7 @@ RUN apt update && apt upgrade -y
 RUN pip3 install ipython ipykernel jupyter elyra-python-editor-extension
 
 # Start Jupyter Lab when the Container launches
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.token=''"]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
 ```
 
 Now, what does this Dockerfile do?
