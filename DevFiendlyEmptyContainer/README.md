@@ -118,6 +118,11 @@ RUN apt-get update -y && \
 RUN apt update && apt upgrade -y
 ```
 
+Then, to build and run it:
+
+	> $ sudo docker build -t emptydebian .
+	> $ sudo docker run --name emptydebian -i -t -d -v ./:/localsynch emptydebian
+
 
 
 
