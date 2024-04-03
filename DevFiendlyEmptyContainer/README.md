@@ -96,6 +96,27 @@ In case you need to stop the container, but get back on your jupyter lab later o
 	> $ sudo docker exec -i -t -u root ubuntudev /bin/bash
 	> $ jupyter lab (inside the container's terminal)
 
+**OPTIONAL:**
+
+Need an empty Debian Container to use as Virtual Machine?
+<br>
+Here's the Docker Image (Dockerfile) to do that:
+
+```docker
+FROM debian:12.5
+
+# Update package repositories and install necessary packages
+RUN apt-get update -y && \
+    apt-get install -y nano python3 python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# OPTIONAL - Remove Externally Managed to install packages directly with pip if you're not going to run the Container Shell as root user - Uncomment if Necessary.
+# RUN  rm /usr/lib/python3.*/EXTERNALLY-MANAGED
+
+#Update and Upgrade Package Repositories (Sometimes you'd need to do it later when the Container is Running)
+RUN apt update && apt upgrade -y
+```
 
 
 
