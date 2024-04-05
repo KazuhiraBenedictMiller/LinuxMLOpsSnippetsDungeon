@@ -59,12 +59,20 @@ Then, to mount that volume:
 
  	> $ sudo docker run --name CONTAINER_NAME -d -i -t -v DOCKER_VOLUME_NAME:/container/folder/path DOCKER_IMAGE_NAME
 
- In case you would like to have a local folder synched with a folder inside the container, to consistently share every change happens in either the Container or Locally in that folder:
+In case you would like to have a local folder synched with a folder inside the container, to consistently share every change happens in either the Container or Locally in that folder:
  
  	> $ sudo docker run --name CONTAINER_NAME -d -i -t -v /host/folder/path:/container/folder/path DOCKER_IMAGE_NAME
 
 With the above command any changes made to files within the local folder will be reflected to the container folder and vice-versa.
+<br>
+If you want to get the complete list of Docker Volumes:
+	
+	> $ sudo docker volume ls
 
+Then, to inspect one:
+
+	> $ sudo docker volume inspect DOCKER_VOLUME_NAME
+	
 Get the IP Address of a Container: 
 
 	> $ sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' CONTAINER_ID_OR_NAME
