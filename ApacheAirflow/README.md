@@ -123,8 +123,8 @@ So far, we know that a docker-compose.yaml file can actually spin up containers 
 
 After the directories setup, cd into the project root and:
 	
-	> $ mkdir -p ./dags ./logs ./plugins ./config
-	> $ sudo chmod 777 ./dags ./logs ./plugins ./config
+	> $ mkdir -p ./dags ./logs ./plugins ./config ./postgres_data
+	> $ sudo chmod 777 ./dags ./logs ./plugins ./config ./postgres_data
 	> $ sudo docker compose up
 
 With this given architecture, the docker-compose file is going to build 2 different containers running on the same Airflow cluster, one for the WebServer and one for the Scheduler here's an example of how that compose file would look like:
@@ -132,12 +132,17 @@ With this given architecture, the docker-compose file is going to build 2 differ
 ```yml
 #version: '3.8'
 version: '3'
+
+networks:
+  airflow_network:
+    driver: bridge
+
 services:
   webserver:
     build:
       context: .
-      dockerfile: Dockerfile.airflow
-    image: AirflowWebServer
+      dockerfile: ./Dockerfile.airflow
+    image: airflow-webserver
     ports:
       - "8080:8080"
     environment:
@@ -161,8 +166,8 @@ services:
   scheduler:
     build:
       context: .
-      dockerfile: Dockerfile.airflow
-    image: AirflowScheduler
+      dockerfile: ./Dockerfile.airflow
+    image: airflow-scheduler
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
@@ -192,7 +197,7 @@ services:
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     networks:
       - airflow_network
 ```
