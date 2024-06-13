@@ -127,6 +127,33 @@ Copy files from local to docker:
 
 Copy files from Docker to Local:
 
-	> sudo docker cp <container_id_or_name>:<container_path> <local_path>
+	> $ sudo docker cp <container_id_or_name>:<container_path> <local_path>
 
 [Docker Docs](https://docs.docker.com/)
+
+**EXTRA:**
+
+In case you need docker to run without sudo permissions, but this process can be done for other services on linux too, follow these commands:
+
+	> $ sudo groupadd docker
+	> $ sudo usermod -aG docker yourusername
+
+Then, check that Docker group has been added to your system:
+
+	> $ groups yourusername
+
+Lastly, Change Ownership of the Docker Socket and Modify Permissions of the Docker Socket:
+
+	> $ sudo chmod 666 /var/run/docker.sock
+
+To revert, the changes made:
+
+	> $ sudo chmod 660 /var/run/docker.sock
+
+Or, in case you changed ownership: 
+
+	> $ sudo chown root:root /var/run/docker.sock
+
+Then, Restart the Docker service ot make sure all changes are in place:
+
+	> $ sudo chown root:root /var/run/docker.sock
