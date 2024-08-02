@@ -101,7 +101,7 @@ To add all the files (now changed) to add the changes to the staging area.
 
 To confirm all the changes in our staging area.
 
-   > 4 git push -u origin main
+   > $ git push -u origin main
 
 To eventually push the changes to the remote repository on github, where with the flag -u Git not only pushes your changes to the remote repository but also sets the upstream (tracking) reference for the current branch, so in case you are pushing or pulling without specifying the branch (NOT RECOMMENDED), git will know to wich branch pull or push to.
 also 
@@ -150,7 +150,9 @@ To achieve that, you'd need to:
    > $ git checkout -b branchname 
    > $ git pull origin branchname
 
-Obviously the branchname are all the same, and make sure the branche exists in your local repo.
+Were git pull origin branchname drwas all the changes from the remote repo.
+<br>
+Obviously the branchname are all the same, and make sure the branch exists in your local repo with git checkout -b newbranchname.
 <br>
 Then, after you've made some changes:
 
