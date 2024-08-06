@@ -229,6 +229,8 @@ To ignore a folder:
 
 	foldername/
 
+NOTE that .git doesn't need to be added to .gitignore, since it's "ignored" by default, although it's the folder that makes things working. 
+<br>
 If you would like to delete a LOCAL branch:
 
 	> $ git checkout main
