@@ -70,4 +70,8 @@ Or, if you want to check if a given port is accessible:
 
 Follow this guide to install Firefox on your Linux Machine [Firefox Installation Guide](https://support.mozilla.org/en-US/kb/install-firefox-linux)
 
+**OPTIONAL:**
+
+REMEMBER TO USE ALIASES AND BINDINGS!!
+
 You're now set to go and you can connect with a remote desktop connection to a fully functioning Linux Machine on a VPS!!
