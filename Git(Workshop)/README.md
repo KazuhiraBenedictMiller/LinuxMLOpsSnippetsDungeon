@@ -89,6 +89,8 @@ Now, if you'd like to synch with a remote GitHub Repo, simply create a new Repos
    > $ git remote add origin https://github.com/YOURUSERNAME/NAMEOFGITHUBREPO.git
    > $ git branch -M main
 
+Where the -M flag stands for "Master Branch", so you're naming your master branch as main.
+<br>
 This way you have synched your remote github repo with your local one and you've created the branch "main", whose name is quite self-explainatory.
 <br>
 To save our current progress in git and to commit (confirm) the changes made and eventually push them to the remote repository, we need to:
@@ -115,6 +117,7 @@ If you'd like to see all the commits made, you can with:
    > $ git log
 
 In order to push changes to a remote repo, you need to make sure that all changes are synched, in fact, if someone else changes the content of the repo, you'd need to pull the latest changes to be able to push them.
+<br>
 Also, when you want to clone a repository but having that synched with a local git repo, so after you've made some changes you want to push them, you'd need to pull the changes as well.
 
    > $ git pull origin branchname
@@ -220,11 +223,50 @@ In case you want to add all the files with git add . but need to exclude some fi
 <br>
 To ignore a file:
 
-filename OR foldername/filename
+	filename OR foldername/filename OR foldername/* with * operator for "ALL FILES"
 
 To ignore a folder:
 
-foldername/
+	foldername/
+
+If you would like to delete a LOCAL branch:
+
+	> $ git checkout main
+	> $ git branch -d branchtodelete
+
+This will change branch and delete the different branch you wanted to delete, you can also use the -D flag to force delete instead of -d soft delete.
+<br>
+If you would like to delete a REMOTE branch:
+
+	> $ git push origin --delete branchtodelete
+
+Where you can also use the -d shorthand flag or -D to force deletion.
+<br>
+If for some cases you would like to create a new empty branch (since branches always "clone" the main branch as starting point)
+
+	> $ git switch --orphan newbranchname (RECCOMENDED for Git v2.23+)
+	OR
+	> $ git checkout --orphan newbranchname
+
+Then, check that the tracking of that branch is truly empty with:
+	
+	> $ git rm -rf .
+
+Finally, to push this new branch to a remote repository, you need to make at least one commit, even if it's an empty commit:
+
+	> $ git commit --allow-empty -m "Initial commit on new branch"
+	> $ git push -u origin newbranchname
+
+AGAIN, FOR THE SAKE OF REPETITION: to create a new branch, with the master branch cloned on it:
+
+	> $ git checkout -b newbranchname		<--- Creates Branch and Switches to it
+	> $ git branch newbranchname			<--- Simply Creates Branch
+	> $ git branch newbranchname branchtoclone 	<--- Simply Creates Branch and Clones as Starting point another onw specified rather than main (Master Branch)
+	> $ git checkout branchname			<--- Simply Switches to Branch
+
+To see which branch is being tracked:
+
+	> $ git branch		<--- the tracked branch will appear green written and with a * preceding the branch name
 
 <br>
 THIS IS NOT A COMPLETE LIST OF EVERYTHING GIT CAN DO, however it's a solid base to get you started.
