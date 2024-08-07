@@ -311,6 +311,9 @@ If you are as lazy as me and want to only insert your Username and GitHub authen
 
 If you decide later that you want to remove these stored credentials, you can do so by deleting the credential file located at ~/.git-credentials
 
+*NOTE:*
+You can configure custom credentials managers to work with git.
+
 <br>
 THIS IS NOT A COMPLETE LIST OF EVERYTHING GIT CAN DO, however it's a solid base to get you started.
 <br>
