@@ -11,7 +11,6 @@ You can have multiple branches to track changes and GitHub also offers interesti
 To follow this sort of Tutorial-SnippetsList you'll need to make sure you have a Github account and git installed locally on your pc.
 (Git should be already installed on your pc)
 
-
 Install Git at [Git Installation Guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then verify your installation:
 
 **OPTIONAL**
@@ -303,6 +302,14 @@ In that case, you'll need to:
 	> $ git add --all
 	> $ git commit -m "Hey there pushing from my local repo on that specific branch"
 	> $ git push -u origin devbranch	<--- Pushing changes to that specific branch we've been assigned to, the -u flag for setting the upstream is optional.
+
+*OPTIONAL:*
+If you are as lazy as me and want to only insert your Username and GitHub authentication token once and you want your system to store them for future usage, then:
+
+	> $ git config --global credential.helper 'cache --timeout=3600'	<--- One hour (3600 are seconds) credentials cached
+	> $ git config --global credential.helper store		<--- Stored forever even after rebooting
+
+If you decide later that you want to remove these stored credentials, you can do so by deleting the credential file located at ~/.git-credentials
 
 <br>
 THIS IS NOT A COMPLETE LIST OF EVERYTHING GIT CAN DO, however it's a solid base to get you started.
