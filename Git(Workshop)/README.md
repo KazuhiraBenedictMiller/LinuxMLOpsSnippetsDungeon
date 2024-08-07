@@ -270,6 +270,40 @@ To see which branch is being tracked:
 
 	> $ git branch		<--- the tracked branch will appear green written and with a * preceding the branch name
 
+*OPTIONAL:*
+*CASE 1:*
+Say that you want a different empty folder to only track and push to a brand new empty branch of your remote repository.
+<br>
+In that case, you'll need to:
+
+	> $ mkdir newemptyfolder
+	> $ cd newemptyfolder
+	> $ git init
+	> $ git checkout -b brandnewbranch
+	> $ git remote add origin https://github.com/USERNAME/NAMEOFGITHUBREPO.git
+	> $ touch test.txt	<--- Just a random test file to push something not empty to the new branch		
+	> $ git add --all
+	> $ git commit -m "Testing Commit from Empty Folder"
+	> $ git push -u origin brandnewbranch
+
+*CASE 2:*
+Say that you have been assigned to actually only on an experimental new feature on a different branch named "devbranch" on the Repository, so you won't have access or push any changes to other branches, but only focus on that one.
+<br>
+In that case, you'll need to:
+	
+	> $ mkdir newemptyfolder	<--- NOT NECESSARY SINCE WHEN CLONING IT CREATES A FOLDER WITH THE NAME OF THE REPO
+	> $ cd newemptyfolder		<--- NOT NECESSARY SINCE WHEN CLONING IT CREATES A FOLDER WITH THE NAME OF THE REPO
+	> $ git clone -b devbranch --single-branch https://github.com/USERNAME/NAMEOFGITHUBREPO.git
+	> $ cd folderwithreponame	
+	> $ git checkout devbranch	<--- NOT with the -b flag as the branch already exists, make sure you get the name correctly.
+	> $ git branch			<--- Make sure you only have the desired branch and it's the only one
+	> $ git pull origin devbranch   <--- In case there have been recent pushes and you need to get those changes
+	> $ git branch --set-upstream-to=origin/devbranch devbranch	<--- OPTIONAL, just sets the upstream to remoterepo/devbranch to our local devbranch
+	> $ touch testfrommyfolder.txt	<--- OPTIONAL, just making sure
+	> $ git add --all
+	> $ git commit -m "Hey there pushing from my local repo on that specific branch"
+	> $ git push -u origin devbranch	<--- Pushing changes to that specific branch we've been assigned to, the -u flag for setting the upstream is optional.
+
 <br>
 THIS IS NOT A COMPLETE LIST OF EVERYTHING GIT CAN DO, however it's a solid base to get you started.
 <br>
