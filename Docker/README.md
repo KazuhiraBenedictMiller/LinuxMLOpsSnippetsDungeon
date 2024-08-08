@@ -169,3 +169,5 @@ If you have multiple docker composes that you would like to fire up or down, and
 	> $ sudo docker compose -f /path/to/file/TradeProducer.test.yml -f /path/to/file/TradeProducer.production.yml up
 
 This will merge configurations with settings in the latter taking precedence.
+<br>
+Also, keep in mind, that using docker compose down, will detach and remove all volumes, networks and containers, if you need to stop them and then restart where you left off, use start and stop commands.
