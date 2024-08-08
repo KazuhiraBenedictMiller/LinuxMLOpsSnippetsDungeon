@@ -121,7 +121,7 @@ To then shut it down:
 
 	> $ sudo docker compose down
 	
-Copy files from local to docker:
+Copy files from local to docker:Start
 	
 	> $ sudo docker cp <local_path_or_filename> <container_id_or_name>:<container_path>
 
@@ -157,3 +157,15 @@ Or, in case you changed ownership:
 Then, Restart the Docker service ot make sure all changes are in place:
 
 	> $ sudo chown root:root /var/run/docker.sock
+
+*OPTIONAL:*
+
+Say that you have docker compose files with custom name, for example TradeProducer.test.yml (or .yaml), to spin it up or down:
+
+	> $ sudo docker compose -f /path/to/file/TradeProducer.test.yml up 	<--- or down instead of up.
+
+If you have multiple docker composes that you would like to fire up or down, and they have different names:
+
+	> $ sudo docker compose -f /path/to/file/TradeProducer.test.yml -f /path/to/file/TradeProducer.production.yml up
+
+This will merge configurations with settings in the latter taking precedence.
