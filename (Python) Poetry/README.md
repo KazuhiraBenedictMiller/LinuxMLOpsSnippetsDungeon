@@ -72,7 +72,7 @@ pendulum = "^2.1"
 or by using poetry add pendulum, and with poetry add the dependency is already installed in your virtual environment automatically.
 
 to run a python script with your virtual environment:
-poetry run file.py
+poetry run python3 file.py
 
 to get info about the environment:
 
@@ -94,6 +94,7 @@ poetry shell
 This will spawn a shell within the project’s virtual environment and activates it, if no virtual environment does exist, a new one will be created and activated, so make sure you are in the folder where the virtual environment is.
 *NOTE:* 
 The scope of commands like shell, show, add, run, etc... are where you're at with the terminal when launching them, make sure you're in the right folder.
+Also, you can run commands inside the shell like within a normal terminal, such as python3 main.py
 
 to export the .lock file in other formats:
 
