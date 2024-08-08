@@ -99,6 +99,10 @@ to export the .lock file in other formats:
 
 poetry export -f requirements.txt --output requirements.txt
 
+*NOTE:*
+If you would like to change the python version, you'd need to use poetry env use /full/path/to/python
+If you have it on your PATH, use instead poetry env use python3.7
+
 https://python-poetry.org/
 https://python-poetry.org/docs/
 

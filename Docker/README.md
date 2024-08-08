@@ -43,7 +43,7 @@ List all Running Containers:
 
 	> $ sudo docker ps
 
-Use the -a Option to also show Stopped Containers.
+Use the -a Flag to also show Stopped Containers.
 
 Run a Docker Image:
 
