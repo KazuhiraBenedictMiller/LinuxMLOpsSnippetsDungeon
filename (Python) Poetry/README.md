@@ -91,6 +91,10 @@ to spin up an interactive shell within the virtual environment:
 
 poetry shell
 
+This will spawn a shell within the project’s virtual environment and activates it, if no virtual environment does exist, a new one will be created and activated, so make sure you are in the folder where the virtual environment is.
+*NOTE:* 
+The scope of commands like shell, show, add, run, etc... are where you're at with the terminal when launching them, make sure you're in the right folder.
+
 to export the .lock file in other formats:
 
 poetry export -f requirements.txt --output requirements.txt
