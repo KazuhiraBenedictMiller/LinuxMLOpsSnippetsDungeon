@@ -33,7 +33,7 @@ The last dot is import as it's telling Docker where to look for the Dockerfile.
 
 Build your Image from docker-compose.yaml:
 
-	> $ sudo docker compose up -d
+	> $ sudo docker compose up -d		<--- Where the -d Flag allows you to let it run in the background (daemon)
 
 List all Docker Images:
 
