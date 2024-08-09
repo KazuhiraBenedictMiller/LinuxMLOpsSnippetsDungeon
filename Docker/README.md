@@ -171,3 +171,11 @@ If you have multiple docker composes that you would like to fire up or down, and
 This will merge configurations with settings in the latter taking precedence.
 <br>
 Also, keep in mind, that using docker compose down, will detach and remove all volumes, networks and containers, if you need to stop them and then restart where you left off, use start and stop commands.
+
+*OPTIONAL:*
+
+.Dockerfile and docker-compose.yml configurations (Links to Docker Docs):
+
+[Dockerfiles](https://docs.docker.com/reference/dockerfile/)
+[Docker Compose](https://docs.docker.com/compose/)
+[Docker Docs](https://docs.docker.com/)

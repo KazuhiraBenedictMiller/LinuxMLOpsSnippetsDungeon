@@ -314,6 +314,30 @@ If you decide later that you want to remove these stored credentials, you can do
 *NOTE:*
 You can configure custom credentials managers to work with git.
 
+*OPTIONAL: DIFFERENCES BETWEEN GIT FETCH AND GIT PULL (AI GENERATED BUT ACCURATE)*
+
+The primary difference between git fetch and git pull lies in how they update your local repository and working directory with changes from a remote repository.
+
+*Git Fetch:*
+
+Purpose: git fetch is used to download commits, files, and refs from a remote repository into your local repository. Fetching is what you do when you want to see what everybody else has been working on. It's the command that tells your remote repositories to send the latest version of everything they have that you don't.
+Effect on Local Repository: When you execute git fetch, Git retrieves the updates made to the remote repository (commits, branches, etc.) and stores them in your local repository under special references. These updates are not merged into your current branch or reflected in your working directory. This allows you to review the changes before deciding what to merge locally.
+
+Use Case: Fetching is useful when you want to review recent changes to the project, compare them with your local work, or prepare for a merge. It's a safe way to bring your repository up to date without altering your working directory.
+
+*Git Pull:*
+
+Purpose: git pull is essentially a combination of git fetch followed by git merge. When you execute git pull, Git will fetch the branch from the remote repository and immediately attempt to merge it into the current active branch in your local repository.
+Effect on Local Repository: Unlike git fetch, git pull updates both your local repository and your working directory. It merges changes fetched from the remote repository into your current branch, potentially modifying files in your working directory.
+
+Use Case: Pulling is typically used when you're ready to update your local branch with the latest changes from the remote repository and merge them into your work. It's a convenient way to synchronize your local repository with the remote, especially when you're working alone or when you're confident that the merge will not result in conflicts.
+
+*Summary:*
+
+Safety and Control: git fetch offers more safety and control over the update process because it allows you to review changes before integrating them into your local branches. This makes it ideal for collaborative environments where understanding changes before merging is crucial.
+
+Convenience: git pull is more convenient for quickly updating your branch with remote changes, especially in scenarios where merge conflicts are unlikely or easily resolved. It combines fetching and merging into a single step.
+
 <br>
 THIS IS NOT A COMPLETE LIST OF EVERYTHING GIT CAN DO, however it's a solid base to get you started.
 <br>
