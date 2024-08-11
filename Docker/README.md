@@ -179,3 +179,139 @@ Also, keep in mind, that using docker compose down, will detach and remove all v
 [Dockerfiles](https://docs.docker.com/reference/dockerfile/)
 [Docker Compose](https://docs.docker.com/compose/)
 [Docker Docs](https://docs.docker.com/)
+
+*EXTRA:*
+
+If you need to pass Build Time or Runtime Variables for your Dockerfile:
+
+	ARG variable=value	<--- Build Time
+	ENV variable=value	<--- Run Time
+
+You can then access them as follows in the Dockerfile (this is an example):
+
+	# Define a build-time variable
+	ARG VERSION=latest
+
+	# Use the ARG variable
+	FROM ubuntu:$VERSION
+
+	> $ docker build --build-arg VERSION=20.04 -t IMAGENAME .	<--- Passing Build Time Variable (ARG in Dockerfiles) 
+
+
+For Environment Variables, instead:
+
+	ENV environment=default_env_value
+	ENV cluster=default_cluster_value
+
+	CMD ["sh", "-c", "node server.js ${cluster} ${environment}"]	<--- Accessing them in the Dockerfile
+
+	> $ docker run -p 9000:9000 -e environment=customvalue -e cluster=vustomvalue -d me/app		<--- Passing them as cli arguments (you can use --env flag instead of -e)
+
+For Docker Compose:
+
+In Docker Compose, you can set environment variables using the environment attribute or an external file with the env_file attribute.
+
+	services:
+	  web:
+	    image: nginx:latest
+	    environment:
+	      - DEBUG=1
+	    env_file:
+	      - .env
+
+.env FILE CONTENT:
+
+	DEBUG=value	
+
+To use environment variables within the docker-compose.yml file itself, such as for dynamic configuration, you can utilize variable substitution:
+
+	services:
+	  db:
+	    image: "postgres:${POSTGRES_VERSION}"
+
+Ensure the environment variable (POSTGRES_VERSION in this case) is exported in your shell or defined in an .env file located in the same directory as your docker-compose.yml, since docker compose automatically detects .env file.
+Alternatively, if you need to pass a different .env file and spcify it, you can simply call the variables in your docker compose as follow and then pass the custom .env file via the cli:
+
+	# .env file
+	POSTGRES_VERSION=13
+	DB_USER=mydbuser
+	DB_PASS=mypassword
+
+	version: '3'
+	services:
+	  db:
+	    image: "postgres:${POSTGRES_VERSION}"
+	    environment:
+	      - POSTGRES_USER=${DB_USER}
+	      - POSTGRES_PASSWORD=${DB_PASS}
+
+
+	> $ docker compose --env-file .env up
+
+OR, you can set up multiple .env files and pass them directly:
+Let's say you have two environment files: .env.dev for development and .env.prod for production.
+
+	# .env.dev
+	POSTGRES_VERSION=13-dev
+	DB_USER=mydbuser_dev
+	DB_PASS=mypassword_dev
+
+	# .env.prod
+	POSTGRES_VERSION=13-prod
+	DB_USER=mydbuser_prod
+	DB_PASS=mypassword_prod
+
+	You can specify which environment files to use by setting the COMPOSE_ENV_FILES environment variable. For example, to use the development environment file:
+
+	export COMPOSE_ENV_FILES=".env.dev,.env.prod"
+	docker compose up
+
+This command tells Docker Compose to merge the variables from both .env.dev and .env.prod files, with later files overriding earlier ones if there are conflicts.
+
+If you have a different path for your .env file:
+
+	version: '3'
+	services:
+	  webapp:
+	    env_file:
+	      - /full/path/to/your/.env
+
+This configuration tells Docker Compose to load the environment variables from the specified .env file located at /full/path/to/your/.env.
+
+Using --env-file Flag
+If you prefer to specify the environment file at runtime, you can use the --env-file flag with the docker compose command. This is particularly handy for one-off commands or when you need to override the default .env file.
+
+	> $ docker compose --env-file /full/path/to/your/.env up
+
+This command instructs Docker Compose to use the environment variables defined in the .env file located at /full/path/to/your/.env.
+
+Using COMPOSE_ENV_FILES Environment Variable
+For scenarios where you need to use multiple environment files, including those with full paths, you can set the COMPOSE_ENV_FILES environment variable. This variable accepts a comma-separated list of paths to .env files.
+
+	> $ export COMPOSE_ENV_FILES="/full/path/to/first.env,/full/path/to/second.env"
+	> $ docker compose up
+
+Use the COMPOSE_ENV_FILES environment variable to specify multiple environment files, allowing for flexible configuration management across different environments or setups.
+
+Passing Variables via CLI:
+
+For Docker Compose, you can pass environment variables temporarily when running a service using the --env or -e option:
+
+	> $ docker compose run -e DEBUG=1 web python console.py 	<--- THIS IS ONLY FOR A ONE OFF TASK, NOT THE ENTIRE LIFECYCLE
+
+Alternatively, you can export environment variables in your shell before running Docker Compose commands, and these variables will be accessible within your docker-compose.yml file:
+
+	> $ export POSTGRES_VERSION=14
+	> $ docker-compose up -d
+
+Or pass them directly when invoking Docker Compose:
+
+	> $ POSTGRES_VERSION=14 docker-compose up -d
+
+Use ARG and ENV in Dockerfiles for build-time and runtime variables.
+In Docker Compose, use the environment attribute for inline environment variables and env_file for external files, since you cannot use the -e flag.
+Utilize variable substitution in docker-compose.yml for dynamic configurations based on environment variables.
+Pass environment variables temporarily with --env when running services or export/set them in the shell before running Docker Compose commands.
+Remember, values present in the environment at runtime override those defined inside .env files, and command-line arguments take precedence over both.
+
+[Docker Compose Environment Variables](https://docs.docker.com/compose/environment-variables/set-environment-variables/)
