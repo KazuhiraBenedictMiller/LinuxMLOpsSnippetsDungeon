@@ -72,7 +72,31 @@ pendulum = "^2.1"
 or by using poetry add pendulum, and with poetry add the dependency is already installed in your virtual environment automatically.
 
 to run a python script with your virtual environment:
-poetry run python3 file.py
+poetry run python file.py
+
+*A BRIEF NOTE ON POETRY RUN:*
+
+Sometimes, if you name your main python file main.py and you only have modules inside the source folder, you can use poetry run main.py or poetry run main.py.
+However, if you renamed the python file and there is no main.py, you main incur in some errors.
+The poetry run command is designed to run a command in the virtual environment managed by Poetry. 
+When you specify a Python file directly (like main.py), Poetry tries to find an executable named main.py in the system's PATH, which leads to the error if such an executable doesn't exist.
+
+Correct Usage of poetry run
+To run a Python script located in your project directory, you should prefix the command with python to indicate that you're executing a Python script. For example:
+
+poetry run python myscriptname.py
+
+This tells Poetry to run the python main.py command inside the virtual environment, correctly interpreting main.py as a Python script rather than trying to execute it as a standalone command.
+
+Specifying Script Location
+If your script is located in a subdirectory, ensure you specify the path relative to the project root. For example, if main.py is inside a src directory, you would run:
+
+poetry run python src/myscriptname.py
+
+Check for Misconfigurations
+Ensure there are no misconfigurations in your pyproject.toml file that might affect how scripts are executed. 
+For instance, incorrectly defined scripts in the [tool.poetry.scripts] section could lead to unexpected behavior.
+
 
 to get info about the environment:
 

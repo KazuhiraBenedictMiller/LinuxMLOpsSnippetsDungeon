@@ -314,4 +314,73 @@ Utilize variable substitution in docker-compose.yml for dynamic configurations b
 Pass environment variables temporarily with --env when running services or export/set them in the shell before running Docker Compose commands.
 Remember, values present in the environment at runtime override those defined inside .env files, and command-line arguments take precedence over both.
 
+*PASSING VARIABLES AT BUILD TIME DYNAMICALLY TO DOCKERFILES:*
+
+To dynamically set environment variables in a Dockerfile at build time using values from an .env file, you cannot directly load the .env file within the Dockerfile itself. 
+Docker does not support an --env-file option during the build process like it does with docker run. 
+However, you can achieve a similar outcome by passing each variable individually as a build argument (ARG) and then converting it into an environment variable (ENV) within the Dockerfile.
+
+To achieve that:
+
+Step 1: Define Variables in Your .env File
+Create an .env file with the variables you want to pass to the Docker build process:
+
+	VERSION=1.2.0
+	DATE=2022-05-10
+
+Step 2: Export Variables and Build the Image
+Before running the Docker build command, export the variables from your .env file in your shell session. Then, use the --build-arg flag to pass them to the Docker build command:
+
+	> $ export $(cat .env | xargs)
+	> $ docker build --build-arg VERSION=$VERSION --build-arg DATE=$DATE -t my-image .
+	
+This command exports all variables from the .env file into your shell environment and then passes them as build arguments to Docker.
+
+OR, in case you have you have some of them and do not want to hardcode the docker build command, first ensure that variables in your .env file have the same name of the ones declared in your Dockerfile, and then:
+
+Create a Bash Script to Automate all that:
+
+	#!/bin/bash
+
+	# Initialize an empty string to hold the build arguments
+	build_args=""
+
+	# Read the .env file line by line
+	while IFS='=' read -r key value; do
+	  # Append each variable as a --build-arg to the build_args string
+	  build_args+="--build-arg $key=$value "
+	done < .env
+
+	# Execute the Docker build command with dynamically constructed build arguments
+	docker build $build_args -t IMAGENAME .
+
+Make sure to give execute permissions to your script:
+
+	> $ chmod +x build.sh
+
+Run Your Script to Build the Docker Image
+Now, instead of manually running the Docker build command, you simply run your script:
+
+	> $ ./build.sh
+
+Step 3: Modify Your Dockerfile to Accept Build Arguments
+Update your Dockerfile to accept these arguments and set them as environment variables:
+
+	# Define build arguments
+	ARG VERSION
+	ARG DATE
+
+	# Set them as environment variables
+	ENV APP_VERSION=$VERSION
+	ENV BUILD_DATE=$DATE
+
+	# Rest of your Dockerfile...
+
+In this Dockerfile, ARG is used to declare build-time variables, and ENV is used to set runtime environment variables inside the container. 
+The values passed through --build-arg during the build process will be available as environment variables (APP_VERSION and BUILD_DATE) in the built image.
+
+Summary
+While Docker does not support loading an .env file directly during the build process, you can achieve dynamic variable setting at build time by exporting the variables from your .env file and passing them individually as build arguments using the --build-arg flag. 
+This method allows you to parameterize your Docker builds effectively without hardcoding values in the Dockerfile.
+
 [Docker Compose Environment Variables](https://docs.docker.com/compose/environment-variables/set-environment-variables/)
