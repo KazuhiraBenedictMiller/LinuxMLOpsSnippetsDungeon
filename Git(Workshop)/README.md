@@ -22,6 +22,37 @@ Then, verify:
 
 	> $ git -v
 
+Now, you can configure your git as follows:
+
+	> $ git config --global user.name "Your Name"
+	> $ git config --global user.email "youremail@example.com"
+
+Aliases can make Git commands shorter and easier to remember. For example, to shorten git status to gs:
+
+	> $ git config --global alias.gs status
+
+To view all your global configuration settings:
+
+	> $ git config --global --list
+
+Or to see all configurations including local and system levels:
+
+	> $ git config --list
+
+If you need to reset any configuration setting to its default:
+
+	> $ git config --global --unset <setting>	<--- Replace <setting> with the name of the setting you want to reset.
+
+Viewing Configuration Files
+Git stores configurations in .gitconfig files located in different directories (~/.gitconfig for global settings, ~/.config/git/config, and .git/config within repositories for local settings). 
+You can directly edit these files with a text editor if you prefer.
+
+For a comprehensive list of all configurable options, refer to the official Git documentation or use man git-config command in your terminal.
+
+	> $ man git-config
+
+[Git Configurations](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration)
+
 Now, before moving on and getting started, you'd need to setup the authentication on your local machine for pushing (saving remotely) your changes to Github.
 <br>
 To do so, you have 2 ways:
