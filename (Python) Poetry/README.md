@@ -222,6 +222,27 @@ Make sure the Python Version Required in the pyproject.toml file are loose enoug
 	[tool.poetry.dependencies]
 	python = "^3.11"	<--- Change this to suit your needs under the tool.poetry.dependencies section of your pyproject.toml file, BEFORE running poetry install
 
+*EXTRA:*
+If for some reason, you need the python executable of your Poetry Virtual Environment to change interpreter on your code editor (VS Codium/VS Code for example), run (whilist on the folder where your Potery Env is located):
+
+	> $ poetry env info
+
+It should return something like this:
+
+	Virtualenv
+	Python:         3.11.2
+	Implementation: CPython
+	Path:           /home/nomad/.cache/pypoetry/virtualenvs/source-XEL_2frX-py3.11
+	Executable:     /home/nomad/.cache/pypoetry/virtualenvs/source-XEL_2frX-py3.11/bin/python	<--- This is the Path to your Poetry Virtual Enviroment Executable that you'd need to use to change interpreter on your code editor
+	Valid:          True
+
+	Base
+	Platform:   linux
+	OS:         posix
+	Python:     3.11.2
+	Path:       /usr
+	Executable: /usr/bin/python3.11
+
 https://python-poetry.org/
 https://python-poetry.org/docs/
 

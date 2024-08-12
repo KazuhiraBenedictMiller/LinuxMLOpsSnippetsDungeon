@@ -107,7 +107,7 @@ To confirm all the changes in our staging area.
 To eventually push the changes to the remote repository on github, where with the flag -u Git not only pushes your changes to the remote repository but also sets the upstream (tracking) reference for the current branch, so in case you are pushing or pulling without specifying the branch (NOT RECOMMENDED), git will know to wich branch pull or push to.
 also 
 <br>
-If you would like to check all the changes you've made before committing them, you can check them with:
+If you would like to check all the changes you've made before committing them, and eventually unstage some of them, you can check them with:
 
    > $ git status
 
