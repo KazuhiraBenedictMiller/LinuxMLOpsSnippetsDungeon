@@ -79,7 +79,7 @@ poetry run python file.py
 Sometimes, if you name your main python file main.py and you only have modules inside the source folder, you can use poetry run main.py or poetry run main.py.
 However, if you renamed the python file and there is no main.py, you main incur in some errors.
 The poetry run command is designed to run a command in the virtual environment managed by Poetry. 
-When you specify a Python file directly (like main.py), Poetry tries to find an executable named main.py in the system's PATH, which leads to the error if such an executable doesn't exist.
+When you specify a Python file directly (like main.py), Poetry tries to find an executable named main.py in the system's PATH, which leads to the error if such an executable doesn't exist (Poetry only sets up the one for main.py).
 
 Correct Usage of poetry run
 To run a Python script located in your project directory, you should prefix the command with python to indicate that you're executing a Python script. For example:
