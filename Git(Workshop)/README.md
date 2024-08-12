@@ -103,7 +103,7 @@ Now, let's get Started with our Git and Github Workshop.
 <br>
 If, before starting, you simply want to clone (not synch and not having git to track the directory) a GitHub remote repo, you can do so with:
 
-   > $ https://github.com/USERNAME/NAMEOFGITHUBREPO.git
+	> $ https://github.com/USERNAME/NAMEOFGITHUBREPO.git
 
 <br>
 First thing first, you'd need to create a local Repository and initialize git to track changes.
@@ -141,6 +141,47 @@ also
 If you would like to check all the changes you've made before committing them, and eventually unstage some of them, you can check them with:
 
    > $ git status
+
+If you've added changes to the staging area using git add and you are seeing them in git status, but decide you want to keep those changes in your working directory without them being considered for the next commit, you can use git restore to unstage those changes.
+
+	> $ git restore --staged FILENAME.EXT
+
+ALSO,
+To unstage changes, you can simply use:
+
+	> $ git restore <file>
+
+To discard local changes, you can use:
+
+	> $ git restore -- <file>
+
+Advanced Options
+--patch Option: This option allows you to interactively choose which changes to restore. It steps through each change and asks if you want to discard or keep it.
+--staged Option: This option restores the file from the index (staging area) instead of the last committed state. It's useful if you've staged changes that you now want to unstage.
+--worktree Option: When combined with --staged, this option restores both the staging area and the working tree to match the specified source. By default, the source is HEAD.
+--source Option: Allows you to specify a different commit to restore from. This is useful if you want to revert changes to a specific earlier state.
+
+Examples
+
+To unstage changes for a specific file:
+
+	> $ git restore --staged myfile.txt
+
+To discard local changes for a specific file:
+	
+	> $ > $ git restore -- myfile.txt
+
+To interactively choose which changes to restore:
+	
+	> $ git restore -p myfile.txt
+
+To restore a file from a specific commit:
+
+	> $ git restore --source=abc123 -- myfile.txt
+
+Differences from Other Commands
+Unlike git reset, which moves the current branch pointer, git restore does not alter the commit history. It only affects the working directory and/or staging area.
+git restore is more focused on file-level changes, whereas git revert creates a new commit that undoes the changes made by other commits.
 
 If you'd like to see all the commits made, you can with:
 
