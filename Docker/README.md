@@ -30,6 +30,7 @@ Build your Image from Dockerfile:
 	> sudo docker build -t DOCKER_IMAGE_NAME .
 	
 The last dot is import as it's telling Docker where to look for the Dockerfile and which folder to use as context.
+If you want to change context, you can do so by adding the full path instead of the . like /path/to/directory to specify the context, or add a remote git repo url like git://github.com/user/repo.git
 
 OR, if you have a custom named Dockerfile, like CustomName.Dockerfile, you can tell which file to use to build the Docker image.
 
