@@ -185,7 +185,13 @@ git restore is more focused on file-level changes, whereas git revert creates a 
 
 If you'd like to see all the commits made, you can with:
 
-   > $ git log
+   > $ git log		<--- git log --oneline optional flag (there are more like --stat flag and --pretty=format, check the docs)
+
+Then, to inspect a commit:
+
+	> $ git show COMMITID	<--- Commit ID is the has of the commit in this format 1eab9bed33a4735a2cf16c61e86a207f3f499f80
+
+You can also export it in a file with > filepath/filename.txt following the command.
 
 In order to push changes to a remote repo, you need to make sure that all changes are synched, in fact, if someone else changes the content of the repo, you'd need to pull the latest changes to be able to push them.
 <br>
@@ -236,7 +242,7 @@ Then, after you've made some changes:
 
 Now, in case you would like to undo something in Git and get back to a previous commit, you'd need to use git reset and then forcefully push into the remote repo, for example:
 
-   > $ git reset --hard HEAD~1
+   > $ git reset --hard HEAD~1		<--- HEAD~1 means, previous commit HEAD~x means x+1 (since the commit 0 is current commit) commits ago, or you can also use the commit id that you can inspect with git log
 
    OR
 
@@ -413,8 +419,10 @@ Convenience: git pull is more convenient for quickly updating your branch with r
 <br>
 THIS IS NOT A COMPLETE LIST OF EVERYTHING GIT CAN DO, however it's a solid base to get you started.
 <br>
-You may as want get to know other commands such as rebase and cherry-pick, but for the sake of summarizing, I won't write them down here to keep this README short.
+You may as want get to know other commands such as rebase and cherry-pick that are incredibly helpful (and i suggest to check out the docs and play around with them, but for the sake of summarizing, I won't write them down here to keep this README short.
 <br>
+Also, I think that the best way to play around and get experienced with git is to create a local repo, synch it with a remote one and then experiment all commands and possible scenarios, just like a workshop, with hands-on, then write down what you did.
+
 Some useful links:
 
 [GitHub](https://github.com/)
