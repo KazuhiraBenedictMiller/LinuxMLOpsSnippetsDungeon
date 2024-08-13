@@ -433,3 +433,6 @@ Where in the docker-compose it looks like this:
 		... rest of docker-compose
 
 To see help for docker, use docker --help or docker COMMAND --help and you'll be good (also refer to the docs and ask an LLM/Google)
+
+Remember that most flags in docker, such as --env --network --volume, can be used with both the equal sign "=" or a space " " before the correspective values.
+This principle applies to most software, but it's most common to see it used in docker cli when passing arguments because of the length of the command, to have better clarity.
