@@ -396,5 +396,11 @@ ENTRYPOINT defines the base command that should always be executed when the cont
 CMD provides default arguments that can be overridden by providing arguments at runtime.
 
 Which means that ENTRYPOINT command parameters are immutable, while with CMD they are mutable when running the container.
+Also, ENTRYPOINT command are executed everytime the container STARTS, both when run and start with docker start (after being stopped) and docker run commands.
+On the other hand, CMD commands are only executed when the container is run for the first time, so if you stop and start it again, you'll have to get a terminal inside the container and restart the command.
+
+*dockerignore:*
+
+Docker supports the .dockerignore file that has the same syntax as a .gitignore and exclude files from the build context, so if you want to copy all files for example, with an exception for a single file, simply add the file name or file path to the .dockerignore and it will be excluded from the build context.
 
 ALSO, Remember that you can push images to dockerhub or pull them.
