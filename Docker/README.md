@@ -29,7 +29,11 @@ Build your Image from Dockerfile:
 
 	> sudo docker build -t DOCKER_IMAGE_NAME .
 	
-The last dot is import as it's telling Docker where to look for the Dockerfile.
+The last dot is import as it's telling Docker where to look for the Dockerfile and which folder to use as context.
+
+OR, if you have a custom named Dockerfile, like CustomName.Dockerfile, you can tell which file to use to build the Docker image.
+
+	> $ docker build -t ImageName . -f CustomName.Dockerfile
 
 Build your Image from docker-compose.yaml:
 
