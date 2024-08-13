@@ -389,3 +389,6 @@ While Docker does not support loading an .env file directly during the build pro
 This method allows you to parameterize your Docker builds effectively without hardcoding values in the Dockerfile.
 
 [Docker Compose Environment Variables](https://docs.docker.com/compose/environment-variables/set-environment-variables/)
+
+
+ALSO, Remember that you can push images to dockerhub or pull them.
