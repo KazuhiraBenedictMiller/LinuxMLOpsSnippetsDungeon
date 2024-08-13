@@ -56,6 +56,22 @@ Run a Docker Image:
 
 Where -i stands for interactive and -t stands for terminal, this way you'll see the terminal outputs and can interact with it.
 
+*MIND THAT:*
+The difference between -d -it and -d -i -t in Docker commands, such as docker run, lies in the interaction and terminal allocation behavior of the container.
+
+-d: Runs the container in detached mode, meaning it runs in the background and does not receive input or display output in the terminal.
+-i: Keeps STDIN open even if not attached. This is useful for interactive applications that require user input.
+-t: Allocates a pseudo-TTY, simulating a real terminal. This is often used in conjunction with -i to allow interactive shell access to the container.
+
+-d -it
+When you combine -d with -it, you're telling Docker to run the container in the background (-d) and allocate a TTY (-t), along with keeping STDIN open (-i). 
+This combination is commonly used for interactive applications that you want to run in the background but still interact with via the terminal.
+
+-d -i -t
+On the other hand, -d -i -t is not a standard combination for Docker commands. 
+Typically, -i and -t are used together (-it) to enable interactive terminal sessions. 
+Separating them (-i -t) would imply trying to keep STDIN open and allocate a TTY separately, which is not the usual practice and might not behave as expected.
+
 Build a Docker Volume to Share Data Local-Container Consistently:
 
 	> $ sudo docker volume create DOCKER_VOLUME_NAME
@@ -407,7 +423,7 @@ ALSO, Remember that you can push images to dockerhub or pull them.
 
 In case you have some containers that need to connect to a localhost, hosted on a another container (for example, redpanda docker compose with network and microservices containerized on their own) you can connect to a given network by naming it in the docker-compose.yml file and then by passing it as argument in the docker run:
 
-	> $ docker run --network NETWORKNAMEOFHOSTCONTAINER -d -i -t IMAGENAME --name CONTAINERNAME
+	> $ docker run --network NETWORKNAMEOFHOSTCONTAINER -d -it IMAGENAME --name CONTAINERNAME
 
 Remember, that when connecting locally to the host container, you can put the external port exposed by the redpanda dockercompose containers, but if you're running them in the same network with containerized applications, you'd need to expose the internal port.
 Also, you'd need to change the host name (or IP Address) to localhost to the service name hosting the network, for example:
