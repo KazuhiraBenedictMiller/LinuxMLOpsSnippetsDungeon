@@ -390,5 +390,11 @@ This method allows you to parameterize your Docker builds effectively without ha
 
 [Docker Compose Environment Variables](https://docs.docker.com/compose/environment-variables/set-environment-variables/)
 
+Remember that CMD and ENTRYPOINT are different, since:
+
+ENTRYPOINT defines the base command that should always be executed when the container starts.
+CMD provides default arguments that can be overridden by providing arguments at runtime.
+
+Which means that ENTRYPOINT command parameters are immutable, while with CMD they are mutable when running the container.
 
 ALSO, Remember that you can push images to dockerhub or pull them.
