@@ -76,6 +76,9 @@ Build a Docker Volume to Share Data Local-Container Consistently:
 
 	> $ sudo docker volume create DOCKER_VOLUME_NAME
 
+Remember that docker volumes are meant to abstract away the specifics of the host filesystem for better portability and management. 
+If you need to work with specific host directories, using the -v flag to mount them directly into the container is the recommended approach.
+
 Then, to mount that volume:
 
  	> $ sudo docker run --name CONTAINER_NAME -d -it -v DOCKER_VOLUME_NAME:/container/folder/path DOCKER_IMAGE_NAME
@@ -85,6 +88,11 @@ In case you would like to have a local folder synched with a folder inside the c
  	> $ sudo docker run --name CONTAINER_NAME -d -it -v /host/folder/path:/container/folder/path DOCKER_IMAGE_NAME
 
 With the above command any changes made to files within the local folder will be reflected to the container folder and vice-versa.
+
+Keep in mind that named volume created or removed (docker volume create/rm) will persist as volumes after the container is removed.
+On the other hand, if you create a volume as a folder, attaching it to a container with the -v flag as -v /host/folder/path, it will persist as a folder, and you'll have to manually delete it.
+Also, the folder in that case will NOT be created automatically when running the container for the first time, so make sure to mkdir /host/folder/path first.
+
 <br>
 If you want to get the complete list of Docker Volumes:
 	
