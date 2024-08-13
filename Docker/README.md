@@ -409,4 +409,27 @@ In case you have some containers that need to connect to a localhost, hosted on 
 
 	> $ docker run --network NETWORKNAMEOFHOSTCONTAINER -d -i -t IMAGENAME --name CONTAINERNAME
 
+Remember, that when connecting locally to the host container, you can put the external port exposed by the redpanda dockercompose containers, but if you're running them in the same network with containerized applications, you'd need to expose the internal port.
+Also, you'd need to change the host name (or IP Address) to localhost to the service name hosting the network, for example:
+
+	#External Port for Local Dev
+        kafka_broker_address = "localhost:19092",
+        #Internal Port for Containerized Production on same Docker Network
+        kafka_broker_address = "redpanda-0:9092",
+
+Where in the docker-compose it looks like this:
+
+	name: redpanda
+	networks:
+	  redpanda_network:
+	    name: redpanda-network
+	    driver: bridge
+	volumes:
+	  redpanda-0: null
+	services:
+	  redpanda-0:
+	    container_name: redpanda-message-broker
+	    command:
+		... rest of docker-compose
+
 To see help for docker, use docker --help or docker COMMAND --help and you'll be good (also refer to the docs and ask an LLM/Google)
