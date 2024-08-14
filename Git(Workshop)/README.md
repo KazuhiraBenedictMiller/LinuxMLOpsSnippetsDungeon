@@ -416,6 +416,36 @@ Safety and Control: git fetch offers more safety and control over the update pro
 
 Convenience: git pull is more convenient for quickly updating your branch with remote changes, especially in scenarios where merge conflicts are unlikely or easily resolved. It combines fetching and merging into a single step.
 
+*EXTRA:*
+Restoring to a specific commit in Detached Mode:
+
+Using `git checkout <commit-hash>` allows you to navigate to a specific commit in your Git repository's history. 
+Each commit in Git is identified by a unique alphanumeric string known as the commit hash. 
+This hash serves as a reference point to the state of the repository at the time of that commit.
+
+When you execute `git checkout <commit-hash>`, Git updates your working directory to reflect the repository's state at that specific commit. 
+This means all files in your working directory will match how they were at the moment of the specified commit. 
+This action is particularly useful for inspecting the project at various stages of development, testing older versions of the project, or reverting changes made after the commit.
+
+It's important to note that checking out a commit places you in a "detached HEAD" state. 
+In this state, you're not on any branch, meaning any new commits you make won't belong to any branch and could be lost unless you explicitly create a new branch while in this detached state or move back to an existing branch.
+To return to working on a branch after checking out a commit, you simply use `git checkout <branch-name>`, replacing `<branch-name>` with the name of the branch you wish to return to, such as `main` or `dev`.
+
+Here's a practical example:
+
+1. To find the commit hash you want to checkout, you can use `git log`, which displays the repository's commit history along with the hashes.
+2. Once you have identified the commit hash, execute `git checkout <commit-hash>` to navigate to that commit. For example, if the commit hash is `a1b2c3d`, you would run:
+  
+   > $ git checkout a1b2c3d
+  
+3. Your working directory now reflects the state of the project at commit `a1b2c3d`.
+4. To return to working on a branch, say `main`, you would then run:
+ 
+   > $ git checkout main
+  
+Now you are at the starting point before doing the git chechout with the commit-hash-id and you safely saw all changes.
+Remember, while in the detached HEAD state, it's advisable to avoid making new commits unless you plan to create a new branch from this state to preserve those changes, or you'll overwrite commits after the hash-id one.
+
 <br>
 THIS IS NOT A COMPLETE LIST OF EVERYTHING GIT CAN DO, however it's a solid base to get you started.
 <br>
