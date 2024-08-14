@@ -31,6 +31,13 @@ Build your Image from Dockerfile:
 	
 The last dot is import as it's telling Docker where to look for the Dockerfile and which folder to use as context.
 If you want to change context, you can do so by adding the full path instead of the . like /path/to/directory to specify the context, or add a remote git repo url like git://github.com/user/repo.git
+Like as follows:
+
+	> $ docker build -t myimage:tag -f /path/to/Dockerfile /path/to/context
+
+OR
+
+	> $ docker build -t myimage:tag git://github.com/user/repo.git#branchname
 
 OR, if you have a custom named Dockerfile, like CustomName.Dockerfile, you can tell which file to use to build the Docker image.
 
@@ -456,7 +463,7 @@ Where in the docker-compose it looks like this:
 	    command:
 		... rest of docker-compose
 
-To see help for docker, use docker --help or docker COMMAND --help and you'll be good (also refer to the docs and ask an LLM/Google)
+To see help for docker, use docker --help or docker COMMAND --help and you'll be good (also refer to the docs and ask an LLM/Google) (Just like with any other software though)
 
 Remember that most flags in docker, such as --env --network --volume, can be used with both the equal sign "=" or a space " " before the correspective values.
 This principle applies to most software, but it's most common to see it used in docker cli when passing arguments because of the length of the command, to have better clarity.
