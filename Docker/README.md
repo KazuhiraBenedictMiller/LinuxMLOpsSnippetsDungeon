@@ -36,8 +36,7 @@ Like as follows:
 	> $ docker build -t myimage:tag -f /path/to/Dockerfile /path/to/context
 
 OR
-
-	> $ docker build -t myimage:tag git://github.com/user/repo.git#branchname
+	> $ docker build -t myimage:tag git://github.com/user/repo.git#branchname 	<--- or with HTTPS https://github.com/user/repo.git#branchname
 
 OR, if you have a custom named Dockerfile, like CustomName.Dockerfile, you can tell which file to use to build the Docker image.
 
