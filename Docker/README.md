@@ -466,3 +466,172 @@ To see help for docker, use docker --help or docker COMMAND --help and you'll be
 
 Remember that most flags in docker, such as --env --network --volume, can be used with both the equal sign "=" or a space " " before the correspective values.
 This principle applies to most software, but it's most common to see it used in docker cli when passing arguments because of the length of the command, to have better clarity.
+
+An interesting article on how to make Dockerfiles (Docker Images) Impressively smaller:
+https://medium.com/@albertazzir/blazing-fast-python-docker-builds-with-poetry-a78a66f5aed0
+
+Here's the summary on how to make Docker Builds smaller for Python (with Poetry) based Images:
+
+1) Warm Up
+First thing first, make sure you're only copying Data that you actually need inside your container and use the --without dev flag when installing the Poetry Environment in your Dockerfile, like so:
+
+	RUN poetry install --without dev
+
+So, in case you are adding Packages in the dev group (usually linters and formatters) those won't be added:
+
+	> $ poetry add --group dev PackageName
+
+2) Cleaning Poetry cache 
+Poetry also supports a --no-cache option, so why am I not using it? We’ll see it later.
+Then add some ENV values for Poetry to further strengthen the determinism of the build:
+
+	ENV POETRY_NO_INTERACTION=1 \
+	    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+	    POETRY_VIRTUALENVS_CREATE=1 \
+	    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+Now, in the SAME command as Poetry install, we also delete the Cache Directory.
+If it’s done in a separate RUN command the cache will still be part of the previous Docker layer (the one containing poetry install ), effectively rendering your optimization useless.
+
+	RUN poetry install --without dev && rm -rf $POETRY_CACHE_DIR
+
+3) Install the Dependencies before actually copying the code and data into the container:
+Every time we modify our code we’ll have to re-install our dependencies! 
+That’s because we COPY our code (which is needed by Poetry to install the project) before the RUN poetry install instruction. 
+Because of how Docker layer caching works, every time the COPY layer is invalidated we’ll also rebuild the successive ones.
+The solution here is to provide Poetry with the minimal information needed to build the virtual environment and only later COPY our codebase. 
+We can achieve this with the --no-root option, which instructs Poetry to avoid installing the current project into the virtual environment.
+
+	FROM python:TAG		<--- Make sure the Base Image is a Slim one
+
+	RUN pip install poetry==VERSION		<--- Make sure you have same Poetry Version as your Local Development Machine (Reproducibility!!)
+
+	ENV POETRY_NO_INTERACTION=1 \
+	    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+	    POETRY_VIRTUALENVS_CREATE=1 \
+	    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+	WORKDIR /app
+
+	COPY pyproject.toml poetry.lock ./	<--- Copy Base Poetry Environment Files
+	RUN touch README.md	<--- Or Poetry will complain
+
+	RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR		<--- First Installation of Poetry Env
+
+	COPY Data ./Data
+
+	RUN poetry install --without dev	<--- Actually wise and fast to Install the Project in the Virtual Environment one more time
+
+	ENTRYPOINT ["poetry", "run", "python", "Path/To/PythonFile.py"]
+
+You can now try to modify the application code, and you’ll see that just the last 3 layers will be re-computed.
+
+The additional RUN poetry install --without dev instruction is needed to install your project in the virtual environment. 
+This can be useful for example for installing any custom script. 
+Depending on your project you may not even need this step. 
+Anyways, this layer execution will be super fast since the project dependencies have already been installed.
+
+4) Using Docker multi-stage builds:
+Up to now builds are fast, but we still end up with big Docker images. 
+We can win this fight by calling multi-stage builds into the game. 
+The optimization is achieved by using the right base image for the right job:
+
+Python buster is a big image that comes with development dependencies, and we will use it to install a virtual environment.
+Python slim-busteris a smaller image that comes with the minimal dependencies to just run Python, and we will use it to run our application.
+Thanks to multi-stage builds we can pass information from one stage to the other, in particular the virtual environment being built. 
+Notice how:
+Poetry isn’t even installed in the runtime stage. 
+Poetry is in fact an unnecessary dependency for running your Python application once your virtual environment is built. 
+We just need to play with environment variables (such as the VIRTUAL_ENV variable) to let Python recognize the right virtual environment.
+For simplicity I removed the second installation step (RUN poetry install --without dev ) as I don’t need it for my toy project, although one could still add it in the runtime image in a single instruction: 
+
+	RUN pip install poetry && poetry install --without dev && pip uninstall poetry
+
+Once Dockerfiles get more complex I also suggest using Buildkit, the new build backend plugged into the Docker CLI. 
+If you are looking for fast and secure builds, that’s the tool to use. [Buildkit](https://docs.docker.com/build/buildkit/)
+
+	> $ DOCKER_BUILDKIT=1 docker build --target=runtime .
+
+	#The builder image, used to build the virtual environment
+	FROM python:3.11-buster as builder 	<--- Complete Heavy Image
+
+	RUN pip install poetry==VERSION
+
+	ENV POETRY_NO_INTERACTION=1 \
+	    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+	    POETRY_VIRTUALENVS_CREATE=1 \
+	    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+	WORKDIR /app
+
+	COPY pyproject.toml poetry.lock ./	<--- Copying only Necessary Files
+	RUN touch README.md	<--- Or Poetry will complain
+
+	RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR		<--- Installing only the Virtual Environment Dependencies and Removing Cache
+
+	#The runtime image, used to just run the code provided its virtual environment (Passed by the Builder Image)
+	FROM python:3.11-slim-buster as runtime
+
+	ENV VIRTUAL_ENV=/app/.venv \
+	    PATH="/app/.venv/bin:$PATH"		<--- Setting up the Venv and adding it to PATH
+
+	COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+
+	#Optional, we don't need Poetry in runtime image, but might be worth it (Eventually simply avoid Uninstalling Poetry) (we build the Virtual Env in our Builder Image, passed only the Venv Specs to our Runtime)
+	RUN pip install poetry && poetry install --without dev && pip uninstall poetry
+
+	COPY Data ./Data
+
+	ENTRYPOINT ["python", "Path/To/Your/PythonFile.py"]
+
+The result? Our runtime image just got 6x smaller! Six times! From > 1.1 GB to 170 MB.
+
+6) Buildkit Cache Mounts:
+We already got a small Docker image and fast builds when code changes, but we can also get fast builds when dependencies change 
+This final trick is not known to many as it’s rather newer compared to the other features above. 
+It leverages Buildkit cache mounts, which basically instruct Buildkit to mount and manage a folder for caching reasons. 
+The interesting thing is that such cache will persist across builds!
+By plugging this feature with Poetry cache (now you understand why I did want to keep caching?) we basically get a dependency cache that is re-used every time we build our project. 
+The result we obtain is a fast dependency build phase when building the same image multiple times on the same environment.
+Notice how the Poetry cache is not cleared after installation, as this would prevent to store and re-use the cache across builds. 
+This is fine and wanted, as Buildkit will not persist the managed cache in the built image (plus, it’s not even our runtime image).
+
+	FROM python:3.11-buster as builder
+
+	RUN pip install poetry==VERSION
+
+	ENV POETRY_NO_INTERACTION=1 \
+	    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+	    POETRY_VIRTUALENVS_CREATE=1 \
+	    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+	WORKDIR /app
+
+	COPY pyproject.toml poetry.lock ./
+	RUN touch README.md
+
+	RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root		<--- Setting Up Persistent Cache
+
+	FROM python:3.11-slim-buster as runtime
+
+	ENV VIRTUAL_ENV=/app/.venv \
+	    PATH="/app/.venv/bin:$PATH"
+
+	COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+
+	COPY Data ./Data
+
+	ENTRYPOINT ["python", "Path/To/Your/PythonFile.py"]
+
+The con of this optimization? Cache mounts are not very CI friendly at the moment, as Buildkit doesn’t allow you controlling the storage location of the cache. 
+It’s unsuprising that this is the most voted open GitHub issue on the Buildkit repo.
+
+Summary:
+
+- Keep layers small, minimizing the amount of stuff you copy and install in it
+- Exploit Docker layer caching and reduce cache misses as much as possible
+- Slow-changing things (project dependencies) must be built before fast-changing things (application code)
+- Use Docker multi-stage builds to make your runtime image as slim as possible
+
+This is how you can put them in practice in Python projects managed by Poetry, but the same principles can be applied to other dependency managers (such as PDM) and other languages.
+
