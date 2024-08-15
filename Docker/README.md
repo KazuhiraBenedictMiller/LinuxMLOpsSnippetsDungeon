@@ -549,7 +549,8 @@ For simplicity I removed the second installation step (RUN poetry install --with
 
 Once Dockerfiles get more complex I also suggest using Buildkit, the new build backend plugged into the Docker CLI. 
 If you are looking for fast and secure builds, that’s the tool to use. [Buildkit](https://docs.docker.com/build/buildkit/)
-
+	
+	#Set DOCKER_BUILDKIT=1 environment variable as 1 to use Buildkit
 	> $ DOCKER_BUILDKIT=1 docker build --target=runtime .
 
 	#The builder image, used to build the virtual environment
