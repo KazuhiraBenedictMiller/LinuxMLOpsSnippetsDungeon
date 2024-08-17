@@ -219,6 +219,45 @@ This will merge the differences in anotherbranch to branchname.
 <br>
 Mind that merge won't delete files that are not present in the second branch.
 <br>
+In case you want to undo a Merge:
+
+After merging a branch into another (usualy main or master branch), the branch remains in the repository unless explicitly deleted. 
+There's no automatic deletion mechanism triggered by a merge operation.
+
+Deleting a Merged Branch
+
+If you decide to delete a branch after merging it, you can do so using the following command:
+
+	> $ git branch -d <branch-name>
+
+This command attempts to delete the specified branch. 
+The -d option ensures that Git will prevent deletion if the branch has not been fully merged. 
+If you're certain you want to delete the branch regardless of its merge status, you can force deletion with:
+
+	> $ git branch -D <branch-name>
+
+Undoing a Git Merge
+
+If you need to undo a merge, the method depends on whether the merge has been pushed to a remote repository.
+
+Local Repository Only: 
+If the merge hasn't been pushed, you can use git reset to revert to the commit before the merge. 
+For example, to go back to the commit just before the last one (assuming the merge was the most recent operation):
+	> $ git reset --hard HEAD~1
+
+Or, if you want to preserve uncommitted changes:
+
+	> $ git reset --merge HEAD~1
+
+Remote Repository: 
+If the merge has been pushed, it's safer to use git revert to create a new commit that undoes the merge. 
+This avoids rewriting history on the remote repository:
+
+	> $ git revert -m 1 <merge-commit-hash>
+
+Here, <merge-commit-hash> is the hash of the merge commit you want to undo. 
+The -m 1 option specifies that you want to keep the parent side of the merge (the branch you merged into).
+
 Now, say that you are assigned to work on a project, started some time ago, and to work on a specific branch.
 <br>
 To achieve that, you'd need to:
@@ -308,6 +347,12 @@ To ignore a folder:
 
 NOTE that .git doesn't need to be added to .gitignore, since it's "ignored" by default, although it's the folder that makes things working. 
 <br>
+If for some reason there are files cached in git and you keep pushing them while you don't want to (this usually happens if you already pushed them first and then added to .gitignore) and you want to remove them from the cache, so the .gitignore is not going to allow pushes to the remote repo:
+
+	Add foldername/* to .gitignore
+	git rm --cached -r foldername/* 	<--- to clear the cached files and ensure they won't be pushed.
+	Then commit and Push to the remote repo.
+
 If you would like to delete a LOCAL branch:
 
 	> $ git checkout main
