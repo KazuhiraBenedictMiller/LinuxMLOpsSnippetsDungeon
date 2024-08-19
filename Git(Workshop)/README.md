@@ -123,9 +123,26 @@ Where the -M flag stands for "Master Branch", so you're naming your master branc
 <br>
 This way you have synched your remote github repo with your local one and you've created the branch "main", whose name is quite self-explainatory.
 <br>
-To save our current progress in git and to commit (confirm) the changes made and eventually push them to the remote repository, we need to:
+To stage our current progress in git and to commit (confirm) the changes made and eventually push them to the remote repository, we need to:
 
    > $ git add .
+
+To Undo a Git add --all:
+
+	> $ git reset		<--- Unstage all Files
+	> $ git reset HEAD <file>	<--- For Specific Files
+	> $ git rm --cached <file>	<--- To clean cache
+
+The git reset command itself does not remove files from your local folder; it primarily affects the staging area (index) and potentially the working directory, depending on the options used. Specifically:
+
+git reset --hard: This command resets the index and working directory to match the HEAD commit. Any changes made to tracked files in the working directory since the last commit are discarded. However, it does not affect untracked files (new files that Git has not been told about). Untracked files remain untouched in your local folder 5.
+git reset (without --hard): By default, git reset operates in "mixed" mode, which means it resets the index but not the working directory. Changes are kept in your working directory but are unstaged. Again, untracked files are unaffected 5.
+To remove untracked files (those not previously staged or committed), you would use the git clean command. This command is specifically designed to remove untracked files from your working directory. Be cautious with git clean, as it permanently deletes these untracked files, making them unrecoverable unless you have backups elsewhere.
+
+git clean -df: This command removes untracked files and directories. The -d option tells git clean to remove untracked directories in addition to untracked files, and -f stands for "force," which is required by default to confirm the potentially destructive action 13.
+It's important to note that git clean is a powerful and potentially destructive command. Always double-check which files will be affected by running git clean -n (dry run) before executing the actual cleanup with git clean -df.
+
+In summary, git reset affects the staging area and possibly the working directory but does not remove untracked files from your local folder. To remove untracked files, you would use git clean.
 
 To add all the files (now changed) to add the changes to the staging area.
 
