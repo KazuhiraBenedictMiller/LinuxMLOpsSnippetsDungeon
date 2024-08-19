@@ -270,7 +270,7 @@ It should return something like this:
 https://python-poetry.org/
 https://python-poetry.org/docs/
 
-
+If for some reason you move the folder, you might need to rerun poetry install.
 
 MORE FLEXIBLE, LIGHTER AND SECURE THAN USING OTHER VENV MANAGER TOOLS
 
