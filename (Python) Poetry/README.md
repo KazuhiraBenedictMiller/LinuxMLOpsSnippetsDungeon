@@ -267,6 +267,25 @@ It should return something like this:
 	Path:       /usr
 	Executable: /usr/bin/python3.11
 
+In case your pyptoject.toml changes significantly since when it got installed and locked the last time, you can fix it by not forcing the lock to not update and then reinstall the venv, as follows:
+
+	> $ poetry lock --no-update
+	> $ poetry install
+
+This usually happens if you changes a lot of dependencies specifications in the pyproject.toml file due to a conflict before installing some desired packages.
+
+As a Matter of fact, the lock command locks (without installing) the dependencies specified in pyproject.toml.
+
+By default, this will lock all dependencies to the latest available compatible versions. 
+To only refresh the lock file, use the --no-update option. 
+This command is also available as a pre-commit hook. 
+See pre-commit hooks for more information.
+
+poetry lock
+Options
+--check: Verify that poetry.lock is consistent with pyproject.toml. (Deprecated) Use poetry check --lock instead.
+--no-update: Do not update locked versions, only refresh lock file.
+
 https://python-poetry.org/
 https://python-poetry.org/docs/
 
