@@ -142,7 +142,8 @@ To remove untracked files (those not previously staged or committed), you would 
 git clean -df: This command removes untracked files and directories. The -d option tells git clean to remove untracked directories in addition to untracked files, and -f stands for "force," which is required by default to confirm the potentially destructive action 13.
 It's important to note that git clean is a powerful and potentially destructive command. Always double-check which files will be affected by running git clean -n (dry run) before executing the actual cleanup with git clean -df.
 
-In summary, git reset affects the staging area and possibly the working directory but does not remove untracked files from your local folder. To remove untracked files, you would use git clean.
+In summary, git reset affects the staging area and possibly the working directory but does not remove untracked files from your local folder. 
+To remove untracked files, you would use git clean.
 
 To add all the files (now changed) to add the changes to the staging area.
 
