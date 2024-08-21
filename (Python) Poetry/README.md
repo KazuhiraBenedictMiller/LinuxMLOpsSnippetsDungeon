@@ -74,6 +74,8 @@ or by using poetry add pendulum, and with poetry add the dependency is already i
 to run a python script with your virtual environment:
 poetry run python file.py
 
+If for some reason you move the folder, you might need to rerun poetry install.
+
 *A BRIEF NOTE ON POETRY RUN:*
 
 Sometimes, if you name your main python file main.py and you only have modules inside the source folder, you can use poetry run main.py or poetry run main.py.
@@ -289,7 +291,155 @@ Options
 https://python-poetry.org/
 https://python-poetry.org/docs/
 
-If for some reason you move the folder, you might need to rerun poetry install.
+*DEPENDENCY HELL TIP:*
+
+For some reasons, poetry might work on your local machine, but when building the Docker Image and running poetry install, you might end up with poetry being able to install your project locally but then running into problems when building the image with docker (and failing to do so).
+Here's an example of an error:
+
+	20.59 Note: This error originates from the build backend, and is likely not a problem with poetry but with twofish (0.3.0) not supporting PEP 517 builds. You can verify this by running 'pip wheel --no-cache-dir --use-pep517 "twofish (==0.3.0)"'.
+	20.59 
+
+First thing first, if the Poetry venv is working fine on your local machine, assuming you can run programs locally with poetry run python myapp.py, cd in the directory where the venv is located and spawn a shell within there:
+
+	> $ cd myprojectfolder
+	> $ poetry shell
+
+Then, copy paste the command inside the shell spawned and see if within the poetry venv, you can build the wheel for the desired package, in our example:
+
+	 > $ pip wheel --no-cache-dir --use-pep517 "twofish (==0.3.0)"
+
+CASE A:
+
+If the error still persists, you can try some options to try to fix it:
+
+OPTION 1:
+
+Try running the following command, since you're maybe missing some dependencies in your linux distro in the shell spawned within the poetry venv:
+
+	apt-get update && apt-get install -y --no-install-recommends \
+    	build-essential \
+    	libssl-dev \
+    	python3-dev \
+    	&& rm -rf /var/lib/apt/lists/*
+
+OPTION 2:
+
+If the Previous option didn't fix the problem, try to loosen the dependency requirement for the package or use an updated version, by modifying dependencies in your pyproject.toml.
+
+CASE B:
+
+If the error doesn't persist and you see this kind of output after running the pip wheel command within the spawned shell:
+
+	Collecting twofish==0.3.0
+	   Downloading twofish-0.3.0.tar.gz (26 kB)
+	   Installing build dependencies ... done
+	   Getting requirements to build wheel ... done
+	   Preparing metadata (pyproject.toml) ... done
+	Building wheels for collected packages: twofish
+	   Building wheel for twofish (pyproject.toml) ... done
+	   Created wheel for twofish: filename=twofish-0.3.0-cp311-cp311-linux_x86_64.whl size=25034 sha256=44aa0a2dd858617a62e416a4979fe0b6f22f4221860dfaed2f2f7cca938d4b19
+	   Stored in directory: /tmp/pip-ephem-wheel-cache-cprxrxe9/wheels/4f/0b/b1/d97875c8e719f4a31f39c3ea718798318be32cf0068b042351
+	Successfully built twofish
+
+Then, this means that the problem is only within the Docker container when trying to build the image.
+
+Here are some possible solutions:
+
+OPTION 1:
+
+You can trying some workaround using a different base image, I don't like this approach, but it might work.
+You may also consider using a complete and not a slim base image, for example.
+
+OPTION 2:
+
+Add this command to your Dockerfile before Running pip install poetry:
+
+	RUN apt-get update && apt-get install -y --no-install-recommends \
+    		build-essential \
+    		libssl-dev \
+    		python3-dev \
+    		&& rm -rf /var/lib/apt/lists/*
+
+	RUN pip install poetry
+
+This should do the Work, but there is a MASSIVE DRAWBACK, your image is going to be incredibly heavy.
+
+OPTION 3:
+
+You can Build the wheels locally, and then import them within your docker container and build them there.
+There are some ways to achieve this:
+
+CASE 1) 
+First export the requirements.txt file with poetry export, then spawn a shell within the poetry vevn and build the wheels there:
+
+	> $ cd myprojectfolder
+	> $ poetry export
+	> $ poetry shell
+	> $ pip wheel --no-cache-dir --use-pep517 --wheel-dir=./wheels -r requirements.txt	<--- in our example we are using PEP517 as its the version we care about
+
+Now you should see a wheels directory full of built wheels for your project.
+We now need to copy them into the docker image and install them there.
+Here's what your docker file will look like:
+	
+	...
+
+	RUN pip install poetry==1.8.3
+
+	WORKDIR /app
+
+	COPY pyproject.toml poetry.lock /app/
+
+	COPY ./wheels /app
+
+	RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+
+	RUN poetry add --no-interaction --no-root ./wheels/*.whl \		<--- Command used to add custom build from path or url to poetry venv.
+	    && rm -rf wheels/*.whl
+
+	COPY . /app
+
+	RUN poetry install --without dev
+
+	ENTRYPOINT ["poetry", "run", "python", "myapp.py"]
+
+CASE 2)
+You can also use a multi-stage dockerfile for this:
+
+	# Stage 1: Prepare the environment and install Poetry
+	FROM python:3.9 AS builder
+
+	WORKDIR /app
+
+	RUN pip install --no-cache-dir --upgrade pip \
+	 && pip install --no-cache-dir poetry
+
+	COPY . .
+
+	# Assuming your wheel files are in a directory named "wheels"
+	COPY ./wheels/*.whl .
+
+	RUN poetry add --no-interaction --no-root *.whl \
+	    && rm -rf wheels/*.whl
+
+	# Stage 2: Set up the final image
+	FROM python:3.9
+
+	ENV PYTHONUNBUFFERED=1
+
+	WORKDIR /app
+
+	# Copy the virtual environment from the builder stage
+	COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+
+	CMD ["python", "-m", "your_module"]
+
+OPTION 4:
+
+My favourite approach, using a multi-stage docker with the Builder Image fully equipped.
+This way we can leverage a Complete Builder Image while still preserving the lightweight of the runtime image.
+In this specific case, the size of the Docker Image went from 1.15 GB (OPTION 2) to 831 MB (Hopsworks is such an heavy package!) 
+
+Here's what the .Dockerfile will look like:
 
 MORE FLEXIBLE, LIGHTER AND SECURE THAN USING OTHER VENV MANAGER TOOLS
 

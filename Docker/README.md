@@ -140,6 +140,8 @@ Remove a Docker Image:
 
 	> $ sudo docker rmi DOCKER_IMAGE_NAME_OR_ID --force
 
+The --force flag is used when a container is spinned up using that image.
+
 Enter into a Docker Image Terminal:
 
 	> $ sudo docker exec -i -t RUNNING_DOCKER_CONTAINER_ID_OR_NAME /bin/bash
