@@ -34,7 +34,6 @@ If you want to change context, you can do so by adding the full path instead of 
 Like as follows:
 
 	> $ docker build -t myimage:tag -f /path/to/Dockerfile /path/to/context
-
 OR
 	> $ docker build -t myimage:tag git://github.com/user/repo.git#branchname 	<--- or with HTTPS https://github.com/user/repo.git#branchname
 
@@ -152,7 +151,9 @@ Make sure the container is running and get the container ID with docker ps, you 
 
 Compose a Multi-Container App:
 
-	> $ sudo docker compose up
+	> $ sudo docker compose up -d
+
+With the -d flag meaning it's detached.
 
 To then shut it down:
 
@@ -199,11 +200,11 @@ Then, Restart the Docker service ot make sure all changes are in place:
 
 Say that you have docker compose files with custom name, for example TradeProducer.test.yml (or .yaml), to spin it up or down:
 
-	> $ sudo docker compose -f /path/to/file/TradeProducer.test.yml up 	<--- or down instead of up.
+	> $ sudo docker compose -f /path/to/file/TradeProducer.test.yml up -d	<--- or down instead of up.
 
 If you have multiple docker composes that you would like to fire up or down, and they have different names:
 
-	> $ sudo docker compose -f /path/to/file/TradeProducer.test.yml -f /path/to/file/TradeProducer.production.yml up
+	> $ sudo docker compose -f /path/to/file/TradeProducer.test.yml -f /path/to/file/TradeProducer.production.yml up -d
 
 This will merge configurations with settings in the latter taking precedence.
 <br>
@@ -218,6 +219,9 @@ Also, keep in mind, that using docker compose down, will detach and remove all v
 [Docker Docs](https://docs.docker.com/)
 
 *EXTRA:*
+
+To Pass env variables in dockerfiles:
+	add flag --env-file /path/to/env/.env to docker run
 
 If you need to pass Build Time or Runtime Variables for your Dockerfile:
 
@@ -254,7 +258,7 @@ In Docker Compose, you can set environment variables using the environment attri
 	    environment:
 	      - DEBUG=1
 	    env_file:
-	      - .env
+	      - path/to/.env
 
 .env FILE CONTENT:
 
@@ -637,4 +641,58 @@ Summary:
 - Use Docker multi-stage builds to make your runtime image as slim as possible
 
 This is how you can put them in practice in Python projects managed by Poetry, but the same principles can be applied to other dependency managers (such as PDM) and other languages.
+
+Using Custom Dockerfiles in docker-compose:
+
+To use a custom Dockerfile with Docker Compose, you need to specify the build context and optionally the Dockerfile name in your docker-compose.yml file. This allows Docker Compose to build images based on your custom Dockerfiles instead of pulling them from a registry. Here's how you can do it:
+
+Basic Syntax
+In your docker-compose.yml file, under the service that you want to build from a custom Dockerfile, you use the build directive. You can specify just the build context (a path to the directory containing your Dockerfile), or you can also specify the Dockerfile name if it's not the default Dockerfile.
+
+Specifying Build Context Only
+If your Dockerfile is named Dockerfile and located in the root of your context directory:
+
+version: '3.8'
+services:
+  your_service:
+    build: ./path/to/build/context	<--- will automatically find .Dockerfile file like docker build given the context
+Specifying Both Build Context and Dockerfile Name
+If your Dockerfile has a custom name or you want to specify it explicitly:
+
+version: '3.8'
+services:
+  your_service:
+    build:
+      context: ./path/to/build/context
+      dockerfile: CustomDockerfileName
+Example
+Let's say you have a project structure like this:
+
+/myapp
+  /myapp-service
+    Dockerfile.custom
+  docker-compose.yml
+And you want to use Dockerfile.custom for building the image of myapp-service. Your docker-compose.yml would look something like this:
+
+version: '3.8'
+services:
+  myapp-service:
+    build:
+      context: ./myapp-service
+      dockerfile: Dockerfile.custom
+    ports:
+      - "8080:8080"
+This configuration tells Docker Compose to build an image for the myapp-service using the Dockerfile located at ./myapp-service/Dockerfile.custom. The built image will then be used to run containers as defined under the service.
+
+Additional Tips
+Build Arguments: You can pass build arguments to your Dockerfile by adding an args subsection under build:
+services:
+  your_service:
+    build:
+      context: ./path/to/build/context
+      dockerfile: CustomDockerfileName
+      args:
+        - MY_VARIABLE=value
+Using Environment Variables: If you need to use environment variables in your Docker Compose file, you can reference them like ${VARIABLE_NAME} within the file.
+By specifying the build context and optionally the Dockerfile name in your docker-compose.yml, you instruct Docker Compose to build your services using your custom Dockerfiles, giving you flexibility in how your containers are built and run.
 
