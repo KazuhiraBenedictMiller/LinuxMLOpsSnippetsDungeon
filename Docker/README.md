@@ -693,6 +693,27 @@ services:
       dockerfile: CustomDockerfileName
       args:
         - MY_VARIABLE=value
+
 Using Environment Variables: If you need to use environment variables in your Docker Compose file, you can reference them like ${VARIABLE_NAME} within the file.
 By specifying the build context and optionally the Dockerfile name in your docker-compose.yml, you instruct Docker Compose to build your services using your custom Dockerfiles, giving you flexibility in how your containers are built and run.
 
+To remove images created by Docker Compose along with stopping and removing containers, networks, and volumes, you can use the --rmi option with the docker-compose down command. The --rmi option specifies what types of images to remove after stopping and removing the containers:
+
+--rmi local: Removes only images that don't have a custom tag. These are typically images built locally by Docker Compose.
+--rmi all: Removes all images used by services defined in the Docker Compose file.
+Example Usage
+If you want to remove all images used by services defined in your Docker Compose file when you bring down your application, you would run:
+
+docker-compose down --rmi all
+This command stops and removes containers, networks, and volumes defined by your docker-compose.yml, as well as removing all images used by those services.
+
+Additional Options
+Removing Orphan Containers: If you also want to remove containers for services not defined in the current Compose file (orphans), you can add the --remove-orphans flag:
+docker-compose down --rmi all --remove-orphans
+Removing Volumes: To remove named volumes declared in the "volumes" section of the Compose file and anonymous volumes attached to containers, add the -v or --volumes flag:
+docker-compose down --rmi all -v
+Important Considerations
+Data Persistence: Be cautious when removing volumes, especially if they contain data you wish to persist across container restarts or deployments.
+Image Reuse: Removing images with custom tags (using --rmi all) means you'll need to rebuild those images or pull them again from a registry if you redeploy the services later.
+Networks: By default, docker-compose down removes networks defined in the Compose file. Be mindful of external networks connected to your services; they won't be removed automatically.
+By using the --rmi option with docker-compose down, you gain control over the cleanup process, allowing Docker Compose to manage images alongside containers, networks, and volumes, simplifying environment teardown and setup processes
