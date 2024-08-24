@@ -523,3 +523,118 @@ Some useful links:
 [Git Docs](https://git-scm.com/doc)
 [GitHub Docs](https://docs.github.com/en)
 [Complete list of Git Commands](https://git-scm.com/docs/git#_git_commands)
+
+
+*MY FAVOURITE GIT STRATEGY:*
+
+Github (Git) Strategy:
+
+In the sea of Git Strategies for every kind of Software Engeneering, where you can either use them as they were initially studied or also take inspiration from some of them and use creativity to solve Development Collaboration Challenges, my most Favourite by far is the GitHub (Git) Strategy.
+
+"Visual" Explanation:
+			
+					       Production																		   Production
+Main Branch ───┬───────────────────────────────────────────────────────────────────────┬─── Pull Request from Dev Branch to Merge Changes ─── Lots of Testing ───┬──────────────────────────────────────────────────────────────────────────────────────────┬─── Pull Request from Dev Branch to Merge Changes ─── Lots of Testing ───>
+	       │								       │							                 │											    │
+	       │								Lots of Testing						                         │									             Lots of Testing
+	       │								       │						                         │											    │
+	       └── Dev Branch ─── New Changes ─── Good Changes Pushed to Dev Branch ───┘                                                                         └── Pull Request from Main Branch ─── New Changes ─── Good Changes Pushed to Dev Branch ───┘                          
+
+
+Technical Explanation:
+
+When Working on a new feature for your project, since you don't want to break production, you'll need to checkout on a new Dev Branch.
+Usually this Dev Branch is being kept and reused for future features.
+On the Dev Branch, you'll start developing the new changes and committing them Locally.
+Then, if you're happy with the result you've obtained, you'll push the Changes to the Remote Repo Dev Branch, that to this point, is only synched with the Production Branch, so in practice, until now, on the Remote GitHub Repo Production Branch and Dev Branch have the same exact code.
+However, when you're Pushing local changes to the Dev Branch, you'll need either GitHub Actions or any other Cron-Like Jobs that will run many different kind of tests on the new code pushed to the Branch.
+At this stage when Pushing you'll only need to Run Unit and Integration type of tests to Ensure Code Integrity.
+Then, since you want to keep the Dev Branch for future Development of new Features, you need to open a Pull Requests on the Main Branch to Fetch Code Changes and there, you'll need to run Perfomance tests and Metrics type of Tests.
+All the Testing is obviously triggered by an automated Cron-Like Tool.
+Then, the GitHub Action, will either reject the Pull Request if the changes have poor metrics, or implement in prouction.
+
+Practical Explanation:
+
+You have a Production Environment on your main branch, but the data skewed a bit since the last time you trained a machine learning model and Metrics are getting worse.
+You'll create a Dev Branch, work a bit on your code locally and see if you can make up a better model.
+If changes are satisfying, you'll push those changes to the Remote Repo Dev Branch, where a GitHub Action will get triggered and run Integration and Unit Tests.
+From There, when you are ready to push those changes to Production, you'll need to open a Pull Request (can be automated as well if code passes Unit and Integration Testing) from your Main Branch.
+On that Pull Request, the GitHub Action on the main branch will get Triggered, running the code before it reaches the Production Environment whilist it's staged and then it will run some other Testing, usually an End-to-End Testing.
+Lastly, if the new model that will be trained with the code Pulled to the Main Branch is better than the production model, you accept the changes, otherwise, reject the Pull Request.   
+
+Pros:
+- Very Modular and Scalable
+- It shines with small teams and operations but works like a charm for bigger ones
+- Ensure Integrity without compromising Interpretability and Explainability
+
+Cons: 
+- Lots of Testing and DevOps (Cloudly Triggered for the most) on your end (not really a con, but it's extra work anyways)
+- Neckbeards will look down on you, reminding you that you should never use an IDE, but rather a text editor, also: you still not using Arch btw? All that Debian does is being Stable, it's a Boomer Distro.
+
+Technical Insights:
+
+Branch Management: Emphasize the importance of keeping the Dev Branch clean and up-to-date with the Main Branch through regular merges or rebases. 
+This ensures that feature development starts from the most recent stable base, minimizing merge conflicts and integration issues.
+
+Testing Stages: Clarify the distinction between initial testing on the Dev Branch (focusing on code correctness and integration) and subsequent testing during the pull request phase (evaluating performance, security, and end-to-end functionality). 
+Highlighting these stages helps in understanding the comprehensive testing strategy employed.
+
+Most common type of Testing:
+
+Unit Testing: Focuses on testing individual components, methods, or functions of the software in isolation. 
+It's designed to validate that each unit of the software performs as expected. 
+Unit tests are typically written and executed by software developers and are known for their speed and ease of automation.
+
+Integration Testing: Verifies the interaction between different parts of the software to ensure they work together as intended. 
+This type of testing is crucial for identifying issues that arise when components are combined, such as communication problems or data inconsistencies. 
+Integration testing follows unit testing in the software development lifecycle and precedes system testing.
+
+Functional Testing: Also known as black-box testing, it focuses on testing the software's functionality against the requirements/specifications. 
+Functional tests validate that the software behaves as expected under various conditions and inputs, without considering the internal workings of the software.
+
+Acceptance Testing: Performed to determine whether a system meets the specified criteria for acceptance. Acceptance testing can be further divided into two types:
+	User Acceptance Testing (UAT): Conducted with actual users to ensure the system meets their needs and expectations.
+	Business Acceptance Testing (BAT): Focuses on meeting business requirements and processes.
+
+System Testing: Involves testing the entire system as a whole to ensure it meets the specified requirements. 
+This type of testing validates the integration of all components and checks the system's compliance with the defined specifications.
+
+End-to-End Testing: Validates the flow of an application from start to finish. 
+It tests the entire workflow of an application in a real-world scenario, including communication with databases, networks, other systems, etc., to ensure the integrated components function together as expected.
+
+*GIT PULL VS MERGE VS FETCH:*
+
+The primary difference between git pull and git merge lies in their operation and automation levels:
+
+Operation:
+git merge operates locally within your repository, merging changes from one branch into another within the local environment.
+git pull, on the other hand, involves both local and remote operations. It fetches changes from a remote repository and then merges them into the local branch.
+Level of Automation:
+git merge requires manual specification of the branch you wish to merge, offering more control over the merging process.
+git pull automates the process of fetching and merging changes from a remote repository, providing convenience but less control over the specifics of the merge.
+Key Points to Consider
+Understanding Their Roles: Knowing when to use git pull versus git merge is crucial for effective version control management. git merge is ideal for integrating changes between local branches, offering precise control. Conversely, git pull is beneficial for incorporating remote changes into your local branch, simplifying collaboration but with reduced control over the merge details.
+Automation and Control: While git pull automates fetching and merging, potentially speeding up workflows, it may not always align with the desired level of control, especially in complex projects. git merge allows for a more deliberate approach, enabling developers to review and adjust merges as needed.
+Use Cases:
+Use git merge when you need to integrate changes from one local branch into another, particularly when you want to carefully manage how the histories of these branches are combined.
+Opt for git pull when you're looking to update your local branch with the latest changes from a remote repository, prioritizing convenience and efficiency in fetching and merging those changes.
+Conclusion
+Choosing between git pull and git merge depends on your specific workflow needs and the level of control you desire over the merging process. git merge offers more granular control for local branch integrations, while git pull provides a streamlined method for incorporating remote changes. Understanding these differences is essential for leveraging Git's capabilities effectively in project management and collaboration scenarios.
+
+
+git fetch and git pull are both Git commands used to interact with remote repositories, but they serve different purposes:
+
+git fetch retrieves updates from the remote repository but does not apply any changes to your local repository. It allows you to view the changes made in the remote repository without affecting your local work. After fetching, you can decide whether to merge the changes into your local branch manually using git merge.
+git pull, on the other hand, is essentially a combination of git fetch followed by git merge. When you execute git pull, Git automatically fetches the updates from the remote repository and attempts to merge them into your current local branch. This means that git pull modifies your local repository by applying the fetched changes immediately.
+Key Points to Consider
+Purpose and Behavior:
+Use git fetch when you want to see what changes have been made to the remote repository without altering your local workspace. This is useful for reviewing changes before deciding to incorporate them.
+Use git pull when you are ready to update your local branch with the latest changes from the remote repository, understanding that this action will merge those changes into your current branch.
+Control Over Merging:
+git fetch gives you full control over when and how to merge changes into your local branches. This is beneficial when you need to review changes or resolve potential conflicts manually.
+git pull automates the fetching and merging process, which can be convenient but reduces your ability to review changes before they are integrated into your local branch.
+Workflow Integration:
+Integrating git fetch into your workflow allows for a more cautious approach to managing remote changes, especially in collaborative environments where careful consideration of changes is necessary.
+git pull is suitable for straightforward updates where immediate integration of remote changes is desired, and there's confidence that the merge will not introduce significant conflicts.
+Conclusion
+Choosing between git fetch and git pull depends on your specific needs regarding control over the merging process and how you prefer to handle updates from remote repositories. git fetch offers a safer, more controlled way to review and selectively merge changes, while git pull provides a quicker, more automated method to stay up-to-date with remote changes. Understanding the differences and implications of these commands is crucial for effective Git usage in version control and collaboration scenarios.
