@@ -844,3 +844,221 @@ ENVIRONMENT=prod docker-compose -f docker-compose.yml -f docker-compose.prod.yml
 This setup allows you to dynamically switch between different configurations based on the environment variable ENVIRONMENT, enabling you to easily toggle between development and production setups.
 
 Remember, the .env file should be updated accordingly before running the commands, or you can set the ENVIRONMENT variable directly in the command line as shown above.
+
+*HEALTHCHEKS AND RESTARTS:*
+
+Implementing health checks and automatic restart mechanisms in Docker can significantly enhance the reliability and uptime of your applications. Below, I'll guide you through setting up health checks in both Dockerfiles and Docker Compose files, along with configuring automatic restarts for your containers.
+
+Dockerfile Health Checks
+
+In your Dockerfile, you can specify a health check instruction to periodically check the health of your containerized application. 
+Here's an example Dockerfile snippet for a simple web server:
+
+FROM nginx:latest
+
+# Set a health check
+HEALTHCHECK --interval=30s --timeout=10s \
+  CMD curl --fail http://localhost/ || exit 1
+
+This health check uses curl to make a request to the web server running inside the container every 30 seconds. 
+If the request fails, Docker marks the container as unhealthy after 10 seconds.
+
+Docker Compose Health Checks and Auto-Restarts
+
+In Docker Compose, you can define health checks and restart policies for your services. 
+Here's an example docker-compose.yml snippet that demonstrates setting up health checks and auto-restarts for a FastAPI service:
+
+version: "3.8"
+
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+    healthcheck:
+      test: curl --fail http://localhost:8000/health || exit 1
+      interval: 2s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  autoheal:
+    restart: always
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+In this example:
+
+The fastapi service has a health check configured to periodically test the /health endpoint. 
+It uses curl to make the request, and Docker considers the service unhealthy if the check fails three times consecutively.
+The restart: on-failure policy tells Docker to restart the container if it exits due to an error.
+The autoheal service uses the willfarrell/autoheal image to monitor all containers labeled with AUTOHEAL_CONTAINER_LABEL=all. 
+If any container becomes unhealthy, autoheal restarts it automatically.
+
+*SYNTAX:*
+
+Docker and Docker Compose offer a wide range of commands to manage containers, images, networks, and volumes. 
+Below is a comprehensive list of commands for Dockerfiles and Docker Compose, along with brief descriptions of what they do.
+
+Dockerfile Commands
+
+A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. 
+Here are some common Dockerfile instructions:
+
+FROM: Specifies the base image from which you are building.
+RUN: Executes any commands in a new layer on top of the current image and commits the result.
+CMD: Provides defaults for an executing container.
+LABEL: Adds metadata to an image as a pair of key-value.
+EXPOSE: Informs Docker that the container listens on the specified network ports at runtime.
+ENV: Sets the environment variable.
+ADD: Copies new files, directories or remote file URLs from <src> and adds them to the filesystem of the image at the path <dest>.
+COPY: Copies new files or directories from <src> and adds them to the filesystem of the container at the path <dest>.
+ENTRYPOINT: Allows you to configure a container that will run as an executable.
+VOLUME: Creates a mount point with the specified name and marks it as holding externally mounted volumes from native host or other containers.
+USER: Specifies the user name (or UID) and optionally the user group (or GID) to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile.
+WORKDIR: Sets the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions that follow it in the Dockerfile.
+ARG: Defines a variable that users can pass at build-time to the builder with the docker build command.
+ONBUILD: Adds a trigger instruction when the image is used as the base for another build.
+STOPSIGNAL: Specifies the system call signal that will be sent to the container to exit.
+HEALTHCHECK: Tells Docker how to test a container to check that it is still working.
+SHELL: Overrides the default shell used for the shell form of the RUN instruction.
+
+Docker Compose Commands
+
+Docker Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration. Here are some Docker Compose commands:
+
+docker compose up: Builds, (re)creates, starts, and attaches to containers for a service.
+docker compose down: Stops and removes containers, networks, and volumes defined in your docker-compose.yml file.
+docker compose build: Builds or rebuilds services.
+docker compose config: Validates and displays the Compose file.
+docker compose cp: Copies files/folders between a service container and the local filesystem.
+docker compose create: Creates containers for a service.
+docker compose exec: Executes a command in a running container.
+docker compose images: Lists images used by the created containers.
+docker compose kill: Force stops service containers.
+docker compose logs: Views output from containers.
+docker compose ps: Lists containers.
+docker compose pull: Pulls service images.
+docker compose push: Pushes service images.
+docker compose restart: Restarts service containers.
+docker compose rm: Removes stopped service containers.
+docker compose run: Runs a one-off command on a service.
+docker compose start: Starts services.
+docker compose stop: Stops services.
+docker compose version: Shows the Docker Compose version information.
+docker compose wait: Blocks until the first service container stops.
+docker compose watch: Watches build context for service and rebuilds/refreshes containers when files are updated.
+
+These commands cover a broad spectrum of operations, from building and running containers to managing their lifecycle and interacting with them.
+
+Below is an overview of common elements and their meanings in a Docker Compose YAML file.
+
+Version
+Specifies the version of the Docker Compose file format. This should be defined at the root level of the file.
+
+version: '3.8'
+Services
+Defines the containers to be created. Each service runs in its own container.
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+Image
+Specifies the Docker image to use for the container.
+
+image: nginx:latest
+Build
+Used instead of image to build an image from a Dockerfile.
+
+build:
+  context: .
+  dockerfile: Dockerfile
+Ports
+Maps ports between the host and the container.
+
+ports:
+  - "8080:80"
+Environment Variables
+Sets environment variables in the container.
+
+environment:
+  - MY_VAR=value
+Or using the env_file option:
+
+env_file:
+  - .env
+Volumes
+Mounts paths or named volumes.
+
+volumes:
+  - ./data:/data
+Or using named volumes:
+
+volumes:
+  myvolume:
+And then referencing them in services:
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - myvolume:/var/lib/postgresql/data
+Networks
+Defines custom networks to be used by the containers.
+
+networks:
+  frontend:
+  backend:
+And then specifying which network(s) a service should connect to:
+
+services:
+  web:
+    networks:
+      - frontend
+      - backend
+Depends On
+Specifies dependencies between services, ensuring they start in dependency order.
+
+depends_on:
+  - db
+Healthcheck
+Defines how to check the health of a service.
+
+healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost"]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+Restart Policies
+Configures restart policies for containers.
+
+restart: always
+Options include no, always, on-failure, and unless-stopped.
+
+Command and Entry Point
+Overrides the default command or entrypoint set in the Dockerfile.
+
+command: ["bundle", "exec", "rails", "server"]
+entrypoint: ["php", "-a"]
+Deploy
+Specifies deployment options (like replicas) for services in swarm mode.
+
+deploy:
+  replicas: 3
+  placement:
+    constraints: [node.role == worker]
+
+This overview covers many of the essential elements you'll encounter in Docker Compose YAML files. 
+For a complete reference, including advanced options and detailed explanations, refer to the official Docker documentation.
+
+[Docker Compose](https://docs.docker.com/reference/cli/docker/compose/)
+[Another Docker Compose Reference](https://docs.divio.com/reference/docker-docker-compose/)
