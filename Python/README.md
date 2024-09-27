@@ -64,10 +64,20 @@ Add the following line to your ~/.bashrc or ~/.zshrc file:
 
 	OR
 
-	> $ alias pythonX='/usr/bin/python3.X'
+	> $ alias pythonX='/usr/local/bin/python3.X'
 
 Replace X with the desired alias name and adjust the version number accordingly.
 
 Reload your shell configuration:
 
 	> $ source ~/.bashrc  
+
+To Export to PATH eventually:
+
+	> $ export PATH=$PATH:/usr/local/bin
+
+Note that When you use make altinstall, Python is typically installed in /usr/local/bin/pythonX.X instead of /usr/bin/python, where X.X is the version number.
+
+You can also use the Full Path:
+
+	> $ /usr/local/bin/python3.9 script.py
