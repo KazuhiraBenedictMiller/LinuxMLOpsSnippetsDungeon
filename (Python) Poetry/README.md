@@ -118,6 +118,8 @@ to spin up an interactive shell within the virtual environment:
 poetry shell
 
 This will spawn a shell within the project’s virtual environment and activates it, if no virtual environment does exist, a new one will be created and activated, so make sure you are in the folder where the virtual environment is.
+To Deactivate, "deactivate" within the spawned shell env
+
 *NOTE:* 
 The scope of commands like shell, show, add, run, etc... are where you're at with the terminal when launching them, make sure you're in the right folder.
 Also, you can run commands inside the shell like within a normal terminal, such as python3 main.py
@@ -506,6 +508,25 @@ OR, another kernel, within the same jupyter installation within poetry:
 	> $ poetry add jupyterlab
 	> $ poetry run python -m ipykernel install --name=KERNEL_NAME
 	> $ poetry run jupyter lab command
+
+If you would like to permanently delete a poetry env, cd into the directory where the venv is located and:
+
+	> $ cd Path/To/PoetryVenv
+	> $ poetry env list	<--- grab the venv name such as pyexamsvenv-w-zx_hGQ-py3.11 (Activated)
+	> $ poetry env remove VENV_NAME
+
+Then Remove the Dir with all the files.
+
+ANOTHER GUIDE:
+
+1. First, deactivate and delete any virtual environments created with Poetry, using the poetry env remove command followed by the corresponding Python version OR VENV_NAME. 
+“`bash $ poetry env remove python3.8 “` 
+2. Next, locate the Poetry installation script, which is usually stored in your home directory under the .local/bin folder. If you installed it with a different method or location, find the appropriate directory. 
+3. Remove the poetry executable file from the installation directory. “`bash $ rm ~/.local/bin/poetry “` 
+4. Optional: If you would like to completely clean up the Poetry configuration and cache files from your system, delete the following directories as well: “`bash $ rm -r ~/.config/poetry $ rm -r ~/.cache/pypoetry “` 
+By following these simple steps, you can achieve an effortless uninstallation of Python Poetry from your system, ensuring a clean environment for your future projects.
+
+Read more here: https://locall.host/python-uninstall-poetry/
 
 MORE FLEXIBLE, LIGHTER AND SECURE THAN USING OTHER VENV MANAGER TOOLS
 
