@@ -528,7 +528,109 @@ By following these simple steps, you can achieve an effortless uninstallation of
 
 Read more here: https://locall.host/python-uninstall-poetry/
 
+Say that you want to use a different python version than your default one in the system for poetry, but for some reason you are forced to use the default one:  
+  
+you can store the AltPyPoetryNew function in a separate file and then load it within your .bashrc. This approach helps keep your .bashrc organized and makes it easier to manage custom functions. Here's how you can set this up:
+
+    Create a Directory for Custom Scripts:
+
+    It's a good practice to store your custom scripts in a dedicated directory. For example, create a .bash.d directory in your home folder:
+
+mkdir -p ~/.bash.d
+
+Create the Function File:
+
+Inside the .bash.d directory, create a file to hold your AltPyPoetryNew function. Let's name it alt_py_poetry_new.sh:
+
+nano ~/.bash.d/alt_py_poetry_new.sh
+
+Add the following content to this file:
+
+#!/bin/bash
+
+function AltPyPoetryNew() {
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            --projectname) project_name="$2"; shift ;;
+            --pyalias) py_alias="$2"; shift ;;
+            *) echo "Unknown parameter passed: $1"; return 1 ;;
+        esac
+        shift
+    done
+
+    if [[ -z "$project_name" || -z "$py_alias" ]]; then
+        echo "Usage: AltPyPoetryNew --projectname <name> --pyalias <python_alias>"
+        return 1
+    fi
+
+    # Create the new project
+    poetry new "$project_name" --name src
+
+    # Navigate into the project directory
+    cd "$project_name" || return 1
+
+    # Set the specified Python interpreter for the project
+    poetry env use "$(which "$py_alias")"
+}
+
+Save and close the file.
+
+Make the Script Executable:
+
+Ensure the script has executable permissions:
+
+chmod +x ~/.bash.d/alt_py_poetry_new.sh
+
+Modify Your .bashrc to Source the Function:
+
+Edit your .bashrc file to source the alt_py_poetry_new.sh script during shell initialization:
+
+nano ~/.bashrc
+
+Add the following line at the end of the file:
+
+# Load custom functions
+if [ -f ~/.bash.d/alt_py_poetry_new.sh ]; then
+    source ~/.bash.d/alt_py_poetry_new.sh
+fi
+
+This snippet checks if the alt_py_poetry_new.sh file exists and sources it, making the AltPyPoetryNew function available in your shell sessions.
+
+Reload Your .bashrc:
+
+Apply the changes by reloading your .bashrc:
+
+    source ~/.bashrc
+
+Using the AltPyPoetryNew Function:
+
+After completing these steps, you can use the AltPyPoetryNew function as follows:
+
+AltPyPoetryNew --projectname miao --pyalias python311
+
+This command will create a new Poetry project named miao with the internal package name src and configure it to use the Python interpreter associated with the alias python311.
+
+Alternative Approach:
+
+If you have multiple custom functions or scripts, you can source all scripts in the ~/.bash.d directory by adding the following to your .bashrc:
+
+# Source all scripts in ~/.bash.d
+if [ -d ~/.bash.d ]; then
+    for script in ~/.bash.d/*.sh; do
+        [ -r "$script" ] && source "$script"
+    done
+    unset script
+fi
+
+This loop will source all .sh files in the ~/.bash.d directory, making any functions or aliases defined in those scripts available in your shell sessions.
+
+By organizing your custom functions in separate files and sourcing them in your .bashrc, you maintain a cleaner and more manageable configuration, facilitating easier updates and maintenance.
+
+
+
 MORE FLEXIBLE, LIGHTER AND SECURE THAN USING OTHER VENV MANAGER TOOLS
+
+
 
 
 
