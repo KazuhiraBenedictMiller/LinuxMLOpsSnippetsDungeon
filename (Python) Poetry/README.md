@@ -626,7 +626,84 @@ This loop will source all .sh files in the ~/.bash.d directory, making any funct
 
 By organizing your custom functions in separate files and sourcing them in your .bashrc, you maintain a cleaner and more manageable configuration, facilitating easier updates and maintenance.
 
+To enhance the AltPyPoetryNew function, allowing it to accept both flagged (--projectname and --pyalias) and positional arguments, you can implement the following approach:
 
+#!/bin/bash
+
+function AltPyPoetryNew() {
+    # Initialize variables
+    project_name=""
+    py_alias=""
+
+    # Check if the first argument starts with a hyphen (flagged usage)
+    if [[ "$1" == --* ]]; then
+        while [[ "$#" -gt 0 ]]; do
+            case $1 in
+                --projectname)
+                    project_name="$2"
+                    shift 2
+                    ;;
+                --pyalias)
+                    py_alias="$2"
+                    shift 2
+                    ;;
+                *)
+                    echo "Unknown parameter passed: $1"
+                    return 1
+                    ;;
+            esac
+        done
+    else
+        # Positional argument usage
+        project_name="$1"
+        py_alias="$2"
+    fi
+
+    # Validate inputs
+    if [[ -z "$project_name" || -z "$py_alias" ]]; then
+        echo "Usage:"
+        echo "  AltPyPoetryNew --projectname <name> --pyalias <python_alias>"
+        echo "  AltPyPoetryNew <projectname> <python_alias>"
+        return 1
+    fi
+
+    # Create the new project
+    poetry new "$project_name" --name src
+
+    # Navigate into the project directory
+    cd "$project_name" || return 1
+
+    # Set the specified Python interpreter for the project
+    poetry env use "$(which "$py_alias")"
+}
+
+Explanation:
+
+    Input Parsing:
+        The function first checks if the initial argument starts with --, indicating the use of flags.
+        If flags are detected, it processes --projectname and --pyalias accordingly.
+        If no flags are present, it assumes positional arguments are provided in the order: project_name followed by py_alias.
+
+    Validation:
+        The function ensures that both project_name and py_alias are supplied.
+        If either is missing, it displays the correct usage and exits.
+
+    Project Creation and Configuration:
+        It creates a new Poetry project with the specified project_name and internal package name src.
+        Navigates into the newly created project directory.
+        Configures the project's virtual environment to use the Python interpreter associated with py_alias.
+
+Usage Examples:
+
+    Using flags:
+
+AltPyPoetryNew --projectname miao --pyalias python311
+
+Using positional arguments:
+
+    AltPyPoetryNew miao python311
+
+This implementation provides flexibility in how you invoke the function, accommodating both flagged and positional argument styles.
 
 MORE FLEXIBLE, LIGHTER AND SECURE THAN USING OTHER VENV MANAGER TOOLS
 
