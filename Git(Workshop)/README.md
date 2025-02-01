@@ -149,6 +149,10 @@ To add all the files (now changed) to add the changes to the staging area.
 
    > $ git commit -m "your very important commit message here"
 
+If you want to actually open the commit file for a longer message simply go for:  
+  
+    > $ git commit
+
 To confirm all the changes in our staging area.
 
    > $ git push -u origin main
