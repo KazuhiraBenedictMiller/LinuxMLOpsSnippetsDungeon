@@ -1096,3 +1096,6 @@ docker tag my-app kazuhirabenedictmiller/alfredoaiapp:latest (Tag the image)
 docker login -u <username> -p <password> (Log in to Docker Hub)
 docker push kazuhirabenedictmiller/alfredoaiapp:latest (Push the image)
 This is the core set of commands you'll use for interacting with Docker Hub from the command line or within scripts (like your GitHub Action).  The repository management commands are less frequent, as you'll usually handle those through the Docker Hub website.
+
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credential-stores
