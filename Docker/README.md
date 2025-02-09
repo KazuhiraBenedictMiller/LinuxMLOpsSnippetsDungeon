@@ -1062,3 +1062,37 @@ For a complete reference, including advanced options and detailed explanations, 
 
 [Docker Compose](https://docs.docker.com/reference/cli/docker/compose/)
 [Another Docker Compose Reference](https://docs.divio.com/reference/docker-docker-compose/)
+
+TO PUSH OR PULL TO A DOCKERHUB REPO
+
+Create a DockerHub Repo, then:
+
+docker push kazuhirabenedictmiller/alfredoaiapp:tagname
+
+
+Authentication:
+
+docker login -u <username> -p <password>: Logs in to your Docker Hub account. You can omit the -p flag, and it will prompt you for the password. This is essential before pushing images.
+docker logout: Logs out of your Docker Hub account.
+Image Management (Pushing/Pulling):
+
+docker push <username>/<repository>:<tag>: Pushes a Docker image to your Docker Hub repository. For example: docker push kazuhirabenedictmiller/alfredoaiapp:latest. The <username> is your Docker Hub username, <repository> is the name of your repository on Docker Hub, and <tag> is the image tag (e.g., latest, v1.0, etc.).
+docker pull <username>/<repository>:<tag>: Pulls a Docker image from Docker Hub to your local machine. Same naming convention as docker push. Example: docker pull kazuhirabenedictmiller/alfredoaiapp:latest.
+Repository Management (Less Frequent):
+
+Docker Hub's repository management is primarily done through the web interface on the Docker Hub website. There are limited command-line options for this. You'd typically create, manage (set visibility, collaborators, etc.), and delete repositories via the website.
+Searching:
+
+docker search <term>: Searches Docker Hub for images matching a given term. Example: docker search python. This is helpful for finding base images or other pre-built images you might want to use.
+Local Image Operations (Related, but not directly Docker Hub):
+
+docker images: Lists locally stored Docker images. You'll often use this to find the image you want to push.
+docker tag <image_id_or_name> <username>/<repository>:<tag>: Tags a local image. This is important because you need to tag the image with your Docker Hub username and repository name before you can push it. Example: docker tag my-app kazuhirabenedictmiller/alfredoaiapp:latest. You can use the image ID or the existing image name.
+docker rmi <username>/<repository>:<tag> or docker rmi <image_id>: Removes a local Docker image.
+Example Workflow (Local to Docker Hub):
+
+docker build -t my-app . (Build your image locally)
+docker tag my-app kazuhirabenedictmiller/alfredoaiapp:latest (Tag the image)
+docker login -u <username> -p <password> (Log in to Docker Hub)
+docker push kazuhirabenedictmiller/alfredoaiapp:latest (Push the image)
+This is the core set of commands you'll use for interacting with Docker Hub from the command line or within scripts (like your GitHub Action).  The repository management commands are less frequent, as you'll usually handle those through the Docker Hub website.
