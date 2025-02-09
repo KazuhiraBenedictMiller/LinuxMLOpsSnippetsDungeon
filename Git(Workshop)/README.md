@@ -915,3 +915,30 @@ Important Considerations:
     Alternative: Using SSH Keys: For enhanced security, consider using SSH keys for authentication. SSH keys provide a secure and convenient method of authenticating with GitHub without storing plain text credentials. You can generate an SSH key pair and add the public key to your GitHub account. Detailed instructions are available in GitHub's documentation.
 
 By configuring Git to store your credentials or by setting up SSH keys, you can streamline your workflow and avoid the hassle of entering your username and PAT for every push operation.
+
+
+To view the list of files tracked by Git in your repository, you can use the following commands:
+
+1. List all tracked files in the current branch:
+
+git ls-files
+
+This command displays all files that are currently tracked by Git in your working directory. 
+
+
+2. List all tracked files in the current branch, including those in subdirectories:
+
+git ls-tree --full-tree --name-only -r HEAD
+
+This command lists all files that are tracked and have been committed in the current branch, recursively including files in subdirectories. 
+
+
+3. List all files that have ever been tracked, including deleted files:
+
+git log --pretty=format: --name-only --diff-filter=A | sort - | sed '/^$/d'
+
+This command provides a list of all files that have ever been added to the repository, including those that have been deleted. 
+
+
+
+These commands can help you inspect the files managed by Git in your repository.
