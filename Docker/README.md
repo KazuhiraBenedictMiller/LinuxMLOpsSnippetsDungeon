@@ -439,6 +439,10 @@ On the other hand, CMD commands are only executed when the container is run for 
 
 Docker supports the .dockerignore file that has the same syntax as a .gitignore and exclude files from the build context, so if you want to copy all files for example, with an exception for a single file, simply add the file name or file path to the .dockerignore and it will be excluded from the build context.
 
+REMEMBER: 
+
+The .dockerignore file should be in the same directory as the Dockerfile or in a parent directory of the Dockerfile relative to the build context, since the .dockerignore file's scope is tied to the build context, it must be in the same directory as the Dockerfile that uses it.
+
 ALSO, Remember that you can push images to dockerhub or pull them.
 
 In case you have some containers that need to connect to a localhost, hosted on a another container (for example, redpanda docker compose with network and microservices containerized on their own) you can connect to a given network by naming it in the docker-compose.yml file and then by passing it as argument in the docker run:
