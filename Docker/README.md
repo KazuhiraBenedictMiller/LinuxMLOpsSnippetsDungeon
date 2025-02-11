@@ -1103,3 +1103,18 @@ This is the core set of commands you'll use for interacting with Docker Hub from
 
 Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credential-stores
+
+
+TO PASS AN ENV VARIABLE (THEN ACCESS WITH OS.ENVIRON.GET("NAMEENVVAR")) use  
+  
+-e VALID_API_KEYS="${{ secrets.VALID_API_KEYS }}"  
+  
+within the docker run command.  
+  
+OR  
+  
+-e VALID_API_KEYS="$VALID_API_KEYS"  
+  
+OR PASS THE ENV FILE  
+  
+docker run -d -p 8000:8000 --env-file .env your_image_name
