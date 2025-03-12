@@ -15,6 +15,10 @@ cd into the folder that has been created by venv /path/to/virtual/environment
 
   	> $ source /bin/activate
 
+When done, simply:
+    > $ deactivate
+    > $ rm -rf /path/to/virtual/environment
+
 🐍 To eventually create an ipython Jupyter Kernel for a Jupyter global installation from a venv, type inside the venv (while activated):
 
 	> $ pip install jupyter
