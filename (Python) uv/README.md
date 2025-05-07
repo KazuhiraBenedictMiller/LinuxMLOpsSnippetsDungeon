@@ -1456,3 +1456,167 @@ Less Direct: It adds an extra step (generating requirements.txt) and detaches th
 Potential for Bloat/Brittleness: Using uv pip freeze captures the exact state of your local environment at that moment, which might include dev tools or be too specific. Using uv pip compile is better but still an extra step.
 Loses Build Speed: If you copy requirements.txt and then use standard pip install in the final stage, you lose the uv speed advantage during the potentially lengthy dependency installation step in your Docker build. If you install uv just to run uv pip install -r requirements.txt, you might as well use uv pip sync directly with pyproject.toml.
 In summary, installing uv within a multi-stage Docker build (Option 2) is the more robust, faster, and cleaner approach for containerizing modern Python applications managed with uv
+
+
+You can declare development-only groups with UV’s PEP 735–compliant [dependency-groups] table, install them locally with uv sync --group dev, and then in your Dockerfile use UV’s --no-group flag (or --no-default-groups plus explicit --group) to install only the “main” dependencies in the container, keeping images lean and production-ready. 
+Astral Docs
+
+1. Define Dependency Groups in pyproject.toml
+UV supports grouping dependencies via the [dependency-groups] table:
+
+toml
+Copy
+Edit
+[project]
+dependencies = [
+  "fastapi>=0.95"
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.1.1,<9",
+  "black",
+]
+Here, anything under dev is only included when you explicitly opt into that group. 
+Astral Docs
+
+You can create additional groups (e.g., lint, notebooks) via uv add --group lint ruff. 
+Astral Docs
+
+2. Install Dev Tools Locally
+During development, you typically install all default groups (including dev) with:
+
+bash
+Copy
+Edit
+uv sync        # includes both main and dev by default
+Or explicitly:
+
+bash
+Copy
+Edit
+uv sync --group dev --group default
+to make it clear which sets you’re installing. 
+Medium
+
+To install only dev tools (omitting main dependencies):
+
+bash
+Copy
+Edit
+uv sync --only-dev    # alias for --only-group dev
+
+---
+
+## 3. Docker: Installing Only Main Dependencies  
+In your Dockerfile, you want **only** the main group. Use:
+```dockerfile
+RUN uv sync --no-group dev
+This tells UV to exclude the dev group while installing all other dependencies (i.e., your application’s core requirements). 
+SaaS Pegasus
+
+Alternatively, to disable all default groups and then include explicitly:
+
+dockerfile
+Copy
+Edit
+RUN uv sync --no-default-groups --group default
+where default refers to the main (unnamed) dependencies section. 
+Astral Docs
+
+4. Example Dockerfile Snippet
+dockerfile
+Copy
+Edit
+FROM ghcr.io/astral-sh/uv:debian AS builder
+
+WORKDIR /app
+COPY pyproject.toml uv.lock ./
+
+# Install only production (main) deps, skip dev
+RUN uv sync --no-group dev
+
+# Copy source and install project package
+COPY . .
+RUN uv install --no-dev    # same effect, skips dev group
+
+FROM python:3.12-slim AS runtime
+WORKDIR /app
+COPY --from=builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+COPY . .
+CMD ["uv", "run", "python", "-m", "my_app"]
+Here, uv sync --no-group dev ensures the builder stage installs only your app’s runtime dependencies. 
+Medium
+
+5. CI Workflow Alignment
+In CI or CD pipelines, use the same flags to mirror production installs:
+
+yaml
+Copy
+Edit
+- run: uv sync --no-group dev
+- run: uv run pytest
+This guarantees that tests run against the same minimal dependency set you ship. 
+Medium
+
+6. Advanced Tips
+Cache UV’s cache in Docker BuildKit with:
+
+dockerfile
+Copy
+Edit
+# syntax=docker/dockerfile:1.4
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --no-group dev
+``` :contentReference[oaicite:9]{index=9}  
+Multiple groups: Exclude several groups via repeated --no-group, e.g. --no-group dev --no-group lint. 
+Astral Docs
+
+Default groups: Override globally in pyproject.toml under [tool.uv] default-groups = ["default"] to change what uv sync installs by default. 
+Astral Docs
+
+By leveraging UV’s dependency-group flags, you can maintain a rich development environment locally while shipping ultra-lean Docker images containing only your production dependencies. 🚀
+
+```
+
+---
+
+Say you want to for example install ruff on your group dev and then only the default group within the docker image
+
+uv add --group dev ruff
+uv lock
+
+FROM ghcr.io/astral-sh/uv:debian AS builder
+
+WORKDIR /app
+COPY pyproject.toml uv.lock ./
+
+# Install only production (default) dependencies, skip dev
+RUN uv sync --no-group dev    # installs everything except the dev group :contentReference[oaicite:1]{index=1}
+
+COPY . .
+
+# If you need your project itself installed:
+RUN uv install --no-dev       # also skips dev when installing the project package
+
+FROM python:3.12-slim AS runtime
+WORKDIR /app
+
+# Copy over the venv from builder
+COPY --from=builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+
+COPY . .
+
+CMD ["uv", "run", "python", "-m", "my_app"]
+
+
+RECAP:
+
+uv add --group dev ruff
+uv lock
+uv sync          # includes dev tools
+
+RUN uv sync --no-group dev
+RUN uv install --no-dev
