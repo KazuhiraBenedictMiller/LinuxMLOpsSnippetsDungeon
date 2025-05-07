@@ -90,6 +90,14 @@ $ uvx pre-commit run --all-files
 
 ---
 
+# To Permanently Delete the venv simply rm -rf the Directory where the env is
+
+```bash
+$ rm -rf FOLDER_NAME_WHERE_ENV_IS
+```
+
+---
+
 ## 4. Integrating with pre-commit Hooks
 
 Deep dive into using UV‑installed `pre-commit` for fast, reproducible Git hooks:
