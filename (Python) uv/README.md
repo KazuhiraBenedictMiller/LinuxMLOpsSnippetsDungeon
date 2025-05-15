@@ -1620,3 +1620,6 @@ uv sync          # includes dev tools
 
 RUN uv sync --no-group dev
 RUN uv install --no-dev
+
+
+https://chatgpt.com/share/68264e69-14d4-8005-b8a0-8fddd205be3a
