@@ -383,3 +383,5 @@ You should see an output like this:
   1 | Bam Bam
 (1 row)
 And there you have it! You should see the contents of the ‘cattable’ within ‘my_new_database’ that you created in pgAdmin 4. This validates that pgAdmin 4 and the terminal are both successfully interacting with the PostgreSQL database inside your Docker container.
+
+https://medium.com/@marvinjungre/get-postgresql-and-pgadmin-4-up-and-running-with-docker-4a8d81048aea
