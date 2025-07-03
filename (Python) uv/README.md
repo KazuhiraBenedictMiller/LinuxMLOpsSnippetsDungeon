@@ -20,6 +20,10 @@ Verify your install:
 $ uv --version
 ```
 
+mkdir newfolder
+cd newfolder
+uv init
+
 ---
 
 ## 2. Basic Commands
@@ -1623,3 +1627,12 @@ RUN uv install --no-dev
 
 
 https://chatgpt.com/share/68264e69-14d4-8005-b8a0-8fddd205be3a
+
+
+if you want to run jupyter lab within your environment, simply:
+
+mkdir DIRECTORY
+cd DIRECTORY
+uv init
+uv add jupyter lab
+uv run jupyter lab --ip=0.0.0.0 --port=8899 --allow-root --NotebookApp.token='' --NotebookApp.password='' --no-browser
