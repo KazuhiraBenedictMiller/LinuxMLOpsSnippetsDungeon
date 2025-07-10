@@ -1636,3 +1636,31 @@ cd DIRECTORY
 uv init
 uv add jupyter lab
 uv run jupyter lab --ip=0.0.0.0 --port=8899 --allow-root --NotebookApp.token='' --NotebookApp.password='' --no-browser
+
+
+✅ To install dependencies from requirements.txt using uv:
+Navigate to your project directory:
+
+bash
+Copy
+Edit
+cd your-project-directory
+Run:
+
+bash
+Copy
+Edit
+uv pip install -r requirements.txt
+This installs all the packages listed in requirements.txt into your environment.
+
+💡 If you haven't already, make sure you're in a virtual environment before doing this (e.g., python -m venv .venv && source .venv/bin/activate on Unix-like systems).
+
+✅ To export the dependencies from your uv project to a requirements.txt:
+If you've installed your packages using uv, and you want to export your environment to a requirements.txt, run:
+
+bash
+Copy
+Edit
+uv pip freeze > requirements.txt
+This command will generate a requirements.txt file with all the current packages and their versions, just like pip freeze.
+
